@@ -1,0 +1,29 @@
+{
+  "name": "PFEProject",
+  "version": "1.0.0",
+  "description": "Meeting network",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "watch": "nodemon app && mongod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gfarra/PFE_Prototype_1"
+  },
+  "author": "Gabriel Farra",
+  "license": "none",
+  "bugs": {
+    "url": "https://github.com/gfarra/PFE_Prototype_1/issues"
+  },
+  "homepage": "https://github.com/gfarra/PFE_Prototype_1",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.17.1",
+    "connect-mongo": "^1.3.2",
+    "express": "^4.15.2",
+    "express-session": "^1.15.2",
+    "mongoose": "^4.9.8",
+    "nodemon": "^1.11.0"
+  }
+}

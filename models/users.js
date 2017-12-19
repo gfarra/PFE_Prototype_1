@@ -1,0 +1,44 @@
+var mongoose = require('mongoose');
+
+var UserSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true
+  },
+  username: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true
+  },
+  first_name: {
+    type: String,
+    unique: false,
+    required: false,
+  },
+  last_name: {
+    type: String,
+    unique: false,
+    required: false,
+  },
+  age: {
+    type: Number,
+    unique: false,
+    required: false,
+    trim: true
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  passwordConf: {
+    type: String,
+    required: true,
+  }
+});
+
+var User = mongoose.model('User', UserSchema);
+
+module.exports = User;
