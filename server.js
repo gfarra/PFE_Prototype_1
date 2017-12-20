@@ -1,8 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-// var session = require('express-session');
-// var MongoStore = require('connect-mongo')(session);
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 
 var app           = express();
 var port          = 8000;
@@ -18,6 +18,16 @@ db.once('open', function () {
   // we're connected!
   console.log("We're connected!");
 });
+
+//use sessions for tracking logins
+app.use(session({
+  secret: 'work hard',
+  resave: true,
+  saveUninitialized: false,
+  store: new MongoStore({
+    mongooseConnection: db
+  })
+}));
 
 // parse incoming requests
 // app.use(bodyParser.json());
