@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container">
+
+<header>
+    <% include ../partials/header %>
+</header>
+
+<main>
+  <div class="Profile">
+      <ul>
+        <li><%= userProfile._id %></li>
+        <li><%= userProfile.email %></li>
+        <li><%= userProfile.username %></li>
+      </ul>
+  </div>
+
+  <form action="/profile/update" method="post">
+            <p>
+                <label for="first_name">First name: </label>
+                <input type="text" name="first_name" id="first_name" autofocus />
+                <label for="last_name">Last name: </label>
+                <input type="text" name="last_name" id="last_name" autofocus />
+                <input type="submit" />
+            </p>
+  </form>
+</main>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>

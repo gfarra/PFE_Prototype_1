@@ -33,7 +33,10 @@ router.post('/', function(req, res, next){
             return next(err);
           } else {
             req.session.userId = user._id;
-            return res.redirect('/profile');
+            req.session.user = user;
+            console.log(user);
+            // return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs');
+            return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
           }
         })
 
@@ -45,6 +48,15 @@ router.post('/', function(req, res, next){
 
 })
 
-router.get('/LogIn')
+router.post('/profile/update', function(req, res, next){
+    if (req.body.first_name &&  req.body.last_name)  {
+      console.log(req.body.first_name + req.body.last_name);
+    }
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
+})
+
+router.get('/index', function (req, res, next) {
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/index.ejs');
+})
 
 module.exports = router;

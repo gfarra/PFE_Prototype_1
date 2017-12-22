@@ -8,6 +8,9 @@ var app           = express();
 var port          = 8000;
 var url           = 'mongodb://localhost:27017/db_app';
 
+// set the view engine to ejs
+app.set('view engine', 'ejs');
+
 //connect to MongoDB
 mongoose.connect(url);
 var db = mongoose.connection;
