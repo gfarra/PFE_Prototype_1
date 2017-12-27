@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/users');
+var Eventus = require ('../models/events');
 
 // rediction to create an User
 router.get('/CreateAccount', function (req, res, next) {
@@ -33,7 +34,7 @@ router.post('/', function(req, res, next){
           } else {
             req.session.userId = user._id;
             req.session.user = user;
-            console.log("User created!" + user.email);
+            console.log("User created : " + user.email + " \n User ID :"+ req.session.userId);
             return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
           }
         });
@@ -49,7 +50,7 @@ router.post('/', function(req, res, next){
             req.session.userId = user._id;
             req.session.user = user;
             console.log(user);
-            console.log("User connecte!" + user.email);
+            console.log("User connected :" + user.email);
             // return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs');
             return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
           }
@@ -64,22 +65,74 @@ router.post('/', function(req, res, next){
 })
 
 // Get profile information , i have an eror here, cookies problem....
-router.get('/profile', function(req, res, next){
-    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs');
+router.get('/profile/update', function(req, res, next){
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profileupdate.ejs',{ userProfile: req.session.user});
 })
 
 // I receive the information correctly, I have to push the information of the databse. Work in progress
 router.post('/profile/update', function(req, res, next){
-    if (req.body.first_name &&  req.body.last_name)  {
-      console.log(req.body.first_name + req.body.last_name);
+      req.session.reload(function(err) {
+        req.session.userId = req.body._id;
+      });
+      console.log(  req.session.userId );
+
+    if (req.body._id && req.body.first_name &&  req.body.last_name)  {
+
+      var userDataUpdate = {
+        first_name: req.body.first_name,
+        last_name: req.body.last_name
+      };
+
+      console.log("Receive :" + userDataUpdate.first_name + userDataUpdate.last_name);
+
+      // Creation of the account in the DataBase
+      User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
+        if (err) return handleError(err);
+        console.log("User updated :" + user.email);
+        req.session.save( function(err) {
+          req.session.reload( function (err) {
+            req.session.user = user;
+          });
+        });
+      });
+      
+      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profileupdate.ejs', { userProfile: req.session.user});
+
+    } else {
+      console.log("Bug");
     }
-    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
+
 })
 
-// Homage for test : Connection and creation of the account OK, problem with profile
+// Homa page for test : Connection and creation of the account OK
+// problem with profile, look get profile
 router.get('/index', function (req, res, next) {
   return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/index.ejs');
 })
 
+router.post('/createEvent', function( req, res, next){
+  // Creation and connection
+  if (req.body.name && req.body.date && req.body.number && req.body.street_name && req.body.city && req.body.post_code && req.body.country) {
+    var eventData = {
+      name: req.body.name,
+      date: req.body.date,
+      building_number: req.body.number,
+      street_name: req.body.street_name,
+      city: req.body.city,
+      post_code: req.body.post_code,
+      country_code : req.body.country,
+    };
+
+    Eventus.create(eventData, function (err, eventus) {
+      if (err) {
+        return next(err)
+      } else {
+        req.session.eventId = eventus._id;
+        console.log("Event created!" + eventus._id);
+        return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
+      }
+    });
+  }
+})
 
 module.exports = router;

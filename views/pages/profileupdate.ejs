@@ -1,4 +1,11 @@
 <!DOCTYPE html>
+
+<script>
+function myFunction() {
+    location.reload();
+}
+</script>
+
 <html lang="en">
 <head>
     <% include ../partials/head %>
@@ -20,15 +27,18 @@
       </ul>
   </div>
 
-
   <form action="/profile/update" method="post">
             <p>
+              <div>
                 <input type="hidden" name="_id" id="_id" value=<%= userProfile._id %> />
                 <label for="first_name">First name: </label>
                 <input type="text" name="first_name" id="first_name" autofocus />
                 <label for="last_name">Last name: </label>
                 <input type="text" name="last_name" id="last_name" autofocus />
-                <input type="submit" />
+              </div>
+              <div>
+                <input type="submit" onclick="myFunction()" />
+              </div>
             </p>
   </form>
 </main>

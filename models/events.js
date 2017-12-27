@@ -14,7 +14,8 @@ var EventSchema = new mongoose.Schema({
     trim: false
   },
   date: {
-
+    type: Date,
+    required: true
   },
   address: {
     number: Number,
