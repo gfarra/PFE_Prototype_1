@@ -2,6 +2,13 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/users');
 
+router.get('/CreateAccount', function (req, res, next) {
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/CreateAccount.ejs');
+})
+
+router.get('/LogIn', function (req, res, next) {
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/LogIn.ejs');
+})
 
 router.post('/', function(req, res, next){
 
@@ -20,8 +27,9 @@ router.post('/', function(req, res, next){
             return next(err)
           } else {
             req.session.userId = user._id;
-            console.log("User created!");
-            return res.redirect('/profile');
+            req.session.user = user;
+            console.log("User created!" + user.email);
+            return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
           }
         });
       } else if(req.body.logmail && req.body.logpassword) {
@@ -35,6 +43,7 @@ router.post('/', function(req, res, next){
             req.session.userId = user._id;
             req.session.user = user;
             console.log(user);
+            console.log("User connecte!" + user.email);
             // return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs');
             return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
           }
@@ -48,6 +57,10 @@ router.post('/', function(req, res, next){
 
 })
 
+router.get('/profile', function(req, res, next){
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs');
+})
+
 router.post('/profile/update', function(req, res, next){
     if (req.body.first_name &&  req.body.last_name)  {
       console.log(req.body.first_name + req.body.last_name);
@@ -58,5 +71,6 @@ router.post('/profile/update', function(req, res, next){
 router.get('/index', function (req, res, next) {
   return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/index.ejs');
 })
+
 
 module.exports = router;

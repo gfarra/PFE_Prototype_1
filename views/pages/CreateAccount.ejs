@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container">
+
+<header>
+    <% include ../partials/header %>
+</header>
+
+<main>
+  <form action="/" method="post">
+            <p>
+                <label for="email">Email: </label>
+                <input type="text" name="email" id="email" autofocus />
+                <label for="username">Username: </label>
+                <input type="text" name="username" id="username" autofocus />
+                <label for="password">Password: </label>
+                <input type="text" name="password" id="password" autofocus />
+                <label for="passwordConf">Password Confirmation: </label>
+                <input type="text" name="passwordConf" id="passwordConf" autofocus />
+                <input type="submit" />
+            </p>
+  </form>
+</main>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>

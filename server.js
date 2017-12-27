@@ -42,5 +42,5 @@ app.use('/', routes);
 
 // listen on port
 app.listen(port, function () {
-  console.log('Express app listening on port' + port);
+  console.log('Express app listening on port ' + port);
 });
