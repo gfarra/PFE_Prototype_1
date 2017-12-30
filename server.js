@@ -6,7 +6,7 @@ var MongoStore = require('connect-mongo')(session);
 
 var app           = express();
 var port          = 8000;
-var url           = 'mongodb://localhost:27017/db_app';
+var url           = 'mongodb://localhost:27017/db_app_trd';
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -39,6 +39,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // include routes
 var routes = require('./routes/router');
 app.use('/', routes);
+
+app.use(function (req, res, next) {
+  var err = new Error('File Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// error handler
+// define as the last app.use callback
+app.use(function (err, req, res, next) {
+  res.status(err.status || 500);
+  res.send(err.message);
+});
+
 
 // listen on port
 app.listen(port, function () {

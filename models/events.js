@@ -13,16 +13,22 @@ var EventSchema = new mongoose.Schema({
     required: false,
     trim: false
   },
+  ownerUser: {
+    type: mongoose.Schema.Types.ObjectId,
+    unique: false,
+    required: true,
+    trim: true
+  },
   date: {
     type: Date,
     required: true
   },
   address: {
-    number: Number,
+    building_number: Number,
     street_name: String,
     city: String,
     post_code: Number,
-    country: Number
+    country_code: Number
   },
   updated: {
     type: Date,

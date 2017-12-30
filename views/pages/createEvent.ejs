@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container">
+
+  <header>
+  <% include ../partials/header %>
+
+  </header>
+
+<main>
+  <form action="/createEvent" method="post">
+            <p>
+                <label for="name">Event name: </label>
+                <input type="text" name="name" id="name" autofocus />
+                <label for="date">Date: </label>
+                <input type="date" name="date" id="date" >
+                <label for="building_number">Building number: </label>
+                <input type="number" name="building_number" id="building_number" autofocus />
+                <label for="street_name">Street name: </label>
+                <input type="text" name="street_name" id="street_name" autofocus />
+                <label for="city">City: </label>
+                <input type="text" name="city" id="city" autofocus />
+                <label for="post_code">Post code: </label>
+                <input type="number" name="post_code" id="post_code" autofocus />
+                <label for="country_code">Country: </label>
+                <% include ../partials/country %>
+                <input type="submit" />
+            </p>
+  </form>
+</main>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>

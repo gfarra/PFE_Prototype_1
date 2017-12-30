@@ -1,20 +1,50 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/users');
+
 var Eventus = require ('../models/events');
 
+function requiresLogin(req, res, next) {
+  if (req.session && req.session.userId) {
+    return next();
+  } else {
+    var err = new Error('You must be logged in to view this page.');
+    err.status = 401;
+    return next(err);
+  }
+}
+
+// ################## INDEX #############################
+
+// Homa page for test : Connection and creation of the account OK
+// problem with profile, look get profile
+router.get('/index', function (req, res, next) {
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/index.ejs');
+})
+
+// #####################################################
+
+// ############## Account Management & connection ######
 // rediction to create an User
-router.get('/CreateAccount', function (req, res, next) {
-  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/CreateAccount.ejs');
+router.get('/createAccount', function (req, res, next) {
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/createAccount.ejs');
 })
 
 // rediction for logIn User
-router.get('/LogIn', function (req, res, next) {
-  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/LogIn.ejs');
+router.get('/logIn', function (req, res, next) {
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/logIn.ejs');
 })
 
 // Creation and/or connection of an user
 router.post('/', function(req, res, next){
+
+    // confirm that user typed same password twice
+    if (req.body.password !== req.body.passwordConf) {
+      var err = new Error('Passwords do not match.');
+      err.status = 400;
+      res.send("passwords dont match");
+      return next(err);
+    }
 
     // Creation and connection
     if (req.body.email && req.body.username && req.body.password && req.body.passwordConf) {
@@ -51,7 +81,7 @@ router.post('/', function(req, res, next){
             req.session.user = user;
             console.log(user);
             console.log("User connected :" + user.email);
-            // return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs');
+            // return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/Profile.ejs');
             return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
           }
         })
@@ -64,13 +94,28 @@ router.post('/', function(req, res, next){
 
 })
 
-// Get profile information , i have an eror here, cookies problem....
-router.get('/profile/update', function(req, res, next){
-  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profileupdate.ejs',{ userProfile: req.session.user});
+// GET for logout logout
+router.get('/logout', requiresLogin, function (req, res, next) {
+  if (req.session) {
+    // delete session object
+    req.session.destroy(function (err) {
+      if (err) {
+        return next(err);
+      } else {
+        return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/index.ejs');
+      }
+    });
+  }
+});
+// #####################################################
+
+// ############## Own user profile Management ##########
+router.get('/profile', requiresLogin, function( req, res, next){
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs');
 })
 
-// I receive the information correctly, I have to push the information of the databse. Work in progress
-router.post('/profile/update', function(req, res, next){
+// I receive the information correctly, I ppdate correctly
+router.post('/profile/update', requiresLogin, function(req, res, next){
       req.session.reload(function(err) {
         req.session.userId = req.body._id;
       });
@@ -88,50 +133,143 @@ router.post('/profile/update', function(req, res, next){
       // Creation of the account in the DataBase
       User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
         if (err) return handleError(err);
-        console.log("User updated :" + user.email);
-        req.session.save( function(err) {
+
+        req.session.save( function(eir) {
           req.session.reload( function (err) {
-            req.session.user = user;
+            req.session.user.last_name = userDataUpdate.last_name;
+            req.session.user.first_name = userDataUpdate.first_name;
+            console.log("User updated :" +   userDataUpdate.first_name + " and " + userDataUpdate.last_name);
           });
         });
       });
-      
-      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profileupdate.ejs', { userProfile: req.session.user});
+
+      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
 
     } else {
       console.log("Bug");
     }
 
 })
+// #####################################################
 
-// Homa page for test : Connection and creation of the account OK
-// problem with profile, look get profile
-router.get('/index', function (req, res, next) {
-  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/index.ejs');
+
+// ################# Event management ##################
+router.get('/createEvent',requiresLogin, function( req, res, next){
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/createEvent.ejs');
 })
 
-router.post('/createEvent', function( req, res, next){
+router.post('/createEvent', requiresLogin, function( req, res, next){
   // Creation and connection
-  if (req.body.name && req.body.date && req.body.number && req.body.street_name && req.body.city && req.body.post_code && req.body.country) {
+  console.log(req.session.user);
+  if (req.body.name && req.body.date && req.body.building_number && req.body.street_name && req.body.city && req.body.post_code && req.body.country_code) {
+    console.log("Var Load...");
     var eventData = {
       name: req.body.name,
       date: req.body.date,
-      building_number: req.body.number,
-      street_name: req.body.street_name,
-      city: req.body.city,
-      post_code: req.body.post_code,
-      country_code : req.body.country,
+      ownerUser: req.session.userId,
+      address: {
+        building_number: req.body.building_number,
+        street_name: req.body.street_name,
+        city: req.body.city,
+        post_code: req.body.post_code,
+        country_code : req.body.country_code
+      }
     };
-
+    console.log(eventData);
     Eventus.create(eventData, function (err, eventus) {
+      console.log("Func create");
       if (err) {
         return next(err)
       } else {
-        req.session.eventId = eventus._id;
         console.log("Event created!" + eventus._id);
         return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
       }
     });
+  } else {
+    var err = new Error('All fields required.');
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/createEvent.ejs');
+  }
+})
+
+router.get('/getEvent', requiresLogin, function( req, res, next){
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/getOneEvent.ejs')
+  //res.redirect('/getOneEvent?_id=' + req.body._id);
+})
+
+router.post('/getOneEvent', requiresLogin, function( req, res, next){
+  console.log(req.session.userId + " : ask for event = " + req.body._id);
+
+  var eventusV = {
+    _id: req.body._id,
+  }
+
+  console.log("#####################");
+
+  Eventus.findOne(eventusV, function(err, eventusV){
+    if (err) return handleError(err);
+    console.log(eventusV);
+    req.session.event = eventusV;
+    console.log("#####################");
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { eventusOne: req.session.event });
+  })
+
+})
+
+router.post('/getAllEvents', requiresLogin, function( req, res, next){
+  console.log(req.session.user);
+  console.log(req.session.userId);
+  var owner = {
+    ownerUser: req.session.userId,
+  }
+  console.log("#####################");
+
+  Eventus.find(owner, function(err, eventus){
+    if (err) return handleError(err);
+    console.log(eventus);
+    console.log("#####################");
+  })
+
+  return eventus;
+})
+// #####################################################
+
+// ################ user management ####################
+
+router.get('/getUsers', requireLogin, function(req, res, next){
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/getUser.ejs')
+})
+
+router.post('/getUsers', requireLogin, function(req, res, next){
+  var userRequest;
+
+  if( req.body.username) {
+    console.log(req.session.userId + " : request this user profile by username => " + req.body.username);
+
+    var userRequest = {
+      username: req.body.username,
+    }
+
+    Eventus.findOne(userRequest, function(err, userRequest){
+      if (err) return handleError(err);
+      console.log(" We found :" + userRequest);
+      req.session.userRequest = userRequest;
+      console.log("#####################");
+      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserProfile.ejs', { userRequest: req.session.userRequest });
+    })
+  } elseif(req.body._id) {
+    console.log(req.session.userId + " : request this user profile by _id => " + req.body._id);
+
+    var userRequest = {
+      _id: req.body._id,
+    }
+
+    Eventus.findOne(userRequest, function(err, userRequest){
+      if (err) return handleError(err);
+      console.log(" We found :" + userRequest);
+      req.session.userRequest = userRequest;
+      console.log("#####################");
+      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserProfile.ejs', { userRequest: req.session.userRequest });
+    })
   }
 })
 

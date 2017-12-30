@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container">
+
+  <header>
+  <% include ../partials/header %>
+
+  </header>
+
+<main>
+  <form action="/getOneEvent" method="post">
+            <p>
+                <label for="_id">Event Id: </label>
+                <input type="text" name="_id" id="_id" autofocus />
+                <input type="submit" />
+            </p>
+  </form>
+</main>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>
