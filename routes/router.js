@@ -210,12 +210,12 @@ router.post('/getOneEvent', requiresLogin, function( req, res, next){
     console.log(eventusV);
     req.session.event = eventusV;
     console.log("#####################");
-    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { eventusOne: req.session.event });
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { eventusOne: req.session.event });
   })
 
 })
 
-router.post('/getAllEvents', requiresLogin, function( req, res, next){
+router.get('/getAllEvents', requiresLogin, function( req, res, next){
   console.log(req.session.user);
   console.log(req.session.userId);
   var owner = {
@@ -235,35 +235,35 @@ router.post('/getAllEvents', requiresLogin, function( req, res, next){
 
 // ################ user management ####################
 
-router.get('/getUsers', requireLogin, function(req, res, next){
+router.get('/getUser', requiresLogin, function(req, res, next){
   return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/getUser.ejs')
 })
 
-router.post('/getUsers', requireLogin, function(req, res, next){
+router.post('/getUser', requiresLogin, function(req, res, next){
   var userRequest;
 
   if( req.body.username) {
     console.log(req.session.userId + " : request this user profile by username => " + req.body.username);
 
-    var userRequest = {
+    userRequest = {
       username: req.body.username,
     }
 
-    Eventus.findOne(userRequest, function(err, userRequest){
+    User.findOne(userRequest, function(err, userRequest){
       if (err) return handleError(err);
       console.log(" We found :" + userRequest);
       req.session.userRequest = userRequest;
       console.log("#####################");
       return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserProfile.ejs', { userRequest: req.session.userRequest });
     })
-  } elseif(req.body._id) {
+  } else if(req.body._id) {
     console.log(req.session.userId + " : request this user profile by _id => " + req.body._id);
 
-    var userRequest = {
+    userRequest = {
       _id: req.body._id,
     }
 
-    Eventus.findOne(userRequest, function(err, userRequest){
+    User.findOne(userRequest, function(err, userRequest){
       if (err) return handleError(err);
       console.log(" We found :" + userRequest);
       req.session.userRequest = userRequest;

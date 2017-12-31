@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container">
+
+<header>
+<% include ../partials/header %>
+
+</header>
+
+<main>
+  <div class="Profile">
+      <ul>
+        <li><%= userRequest._id %></li>
+        <li><%= userRequest.username %></li>
+        <li><%= userRequest.first_name %></li>
+        <li><%= userRequest.last_name %></li>
+        <li><%= userRequest.email %></li>
+      </ul>
+  </div>
+
+</main>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>
