@@ -273,4 +273,21 @@ router.post('/getUser', requiresLogin, function(req, res, next){
   }
 })
 
+router.get('/getUserList', requiresLogin, function(req, res, next){
+  var userList;
+
+  User.find(function(err, userList){
+    if (err) return handleError(err);
+    console.log(userList);
+    console.log("#####################");
+    req.session.userRequest = userList
+
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/userList.ejs', { userList: req.session.userList });
+
+  })
+})
+
+
+
+
 module.exports = router;

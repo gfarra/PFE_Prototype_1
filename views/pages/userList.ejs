@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container">
+
+<header>
+  <% include ../partials/header %>
+
+</header>
+
+<main>
+  <div class="UserList">
+
+      <ul>
+        <% userList.each(userList ,function(index, value) { %>
+            <li><%= value %></li>
+        <% }); %>
+      </ul>
+  </div>
+  for(var index in object) {
+      var attr = object[index];
+  }
+</main>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>
