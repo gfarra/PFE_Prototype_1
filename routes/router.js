@@ -232,7 +232,7 @@ router.get('/getAllEvents', requiresLogin, function( req, res, next){
   return eventus;
 })
 
-router.get('/updateEvent', requiresLogin, function( req, res, next){
+router.post('/updateEvent', requiresLogin, function( req, res, next){
   console.log(req.body._id);
   console.log(req.session.userId);
 
@@ -248,9 +248,9 @@ router.get('/updateEvent', requiresLogin, function( req, res, next){
       post_code: req.body.post_code,
     }
   };
-  console.log("#####################");
+  console.log(eventDataUpdate);
 
-  eventus.findByIdAndUpdate(eventDataUpdate._id, { $set: eventDataUpdate }, function(err, eventusV) {
+  Eventus.findByIdAndUpdate(eventDataUpdate._id, { $set: eventDataUpdate }, function(err, eventusV) {
 
       if (err) return handleError(err);
       req.session.event = eventusV;
