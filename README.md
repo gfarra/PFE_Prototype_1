@@ -25,14 +25,19 @@ Add information in user database - Problem of refresh in the HTML page after add
 Modifie informations in user database - Problem of refresh in the HTML page after the modification of informations
 
 Urgent problem 27/12/2017:
-Accès to profile tab - Not working.
+Accès to profile tab - Fixed
 
 28/12/2017
 I have to create some Functions :
-Create one event
-Modifie one event
-Request one event
-Request all events
+Create one event - done
+Modifie one event - done
+Research one event - done
+Research all events - done
+
+30/12/2017
+Research my events - done
+Research all users - done
+Research one user - done
 
 // Account creation and loggin or loggin.
 router.post('/) {
