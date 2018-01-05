@@ -34,7 +34,9 @@ Research one event - done
 Research all events - done
 
 Problem with :
-Modifie event and modifie profile
+Modifie event
+Modifie profile
+Date format Day + hour. ( Create event and modifie event)
 
 02/12/2017
 Research my events - done
