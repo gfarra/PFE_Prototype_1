@@ -27,17 +27,23 @@ Modifie informations in user database - Problem of refresh in the HTML page afte
 Urgent problem 27/12/2017:
 Accès to profile tab - Fixed
 
-28/12/2017
-I have to create some Functions :
+28/12/2017:
 Create one event - done
 Modifie one event - done
 Research one event - done
 Research all events - done
 
-30/12/2017
+Problem with :
+Modifie event and modifie profile
+
+02/12/2017
 Research my events - done
 Research all users - done
 Research one user - done
+Research by location : City or country or postal code or GPS location ( add gps location in the database )
+
+
+// FUNCTIONS INFORMATIONS
 
 // Account creation and loggin or loggin.
 router.post('/) {
