@@ -64,13 +64,12 @@ router.post('/', function(req, res, next){
           } else {
             req.session.userId = user._id;
             req.session.user = user;
-            console.log("User created : " + user.email + " \n User ID :"+ req.session.userId);
+            console.log("User created : " + user.email + " User ID :"+ req.session.userId + "\n");
             return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
           }
         });
       // Else if the app receive logmail and logpasswork --> Simpe connextion
       } else if(req.body.logmail && req.body.logpassword) {
-        console.log("ID reveived");
         User.authenticate(req.body.logmail, req.body.logpassword, function (error, user) {
           if (error || !user) {
             var err = new Error('Wrong email or password.');
@@ -79,9 +78,7 @@ router.post('/', function(req, res, next){
           } else {
             req.session.userId = user._id;
             req.session.user = user;
-            console.log(user);
-            console.log("User connected :" + user.email);
-            // return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/Profile.ejs');
+            console.log("User connected :" + user.email + "\n");
             return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
           }
         })
@@ -98,6 +95,7 @@ router.post('/', function(req, res, next){
 router.get('/logout', requiresLogin, function (req, res, next) {
   if (req.session) {
     // delete session object
+    console.log("User disconeted :" + req.session.user.username + "\n");
     req.session.destroy(function (err) {
       if (err) {
         return next(err);
@@ -119,8 +117,6 @@ router.post('/profile/update', requiresLogin, function(req, res, next){
       req.session.reload(function(err) {
         req.session.userId = req.body._id;
       });
-      console.log(  req.session.userId );
-
     if (req.body._id && req.body.first_name &&  req.body.last_name)  {
 
       var userDataUpdate = {
@@ -128,7 +124,7 @@ router.post('/profile/update', requiresLogin, function(req, res, next){
         last_name: req.body.last_name
       };
 
-      console.log("Receive :" + userDataUpdate.first_name + userDataUpdate.last_name);
+      console.log("Receive :" + userDataUpdate.first_name + userDataUpdate.last_name + "\n");
 
       // Creation of the account in the DataBase
       User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
@@ -138,7 +134,7 @@ router.post('/profile/update', requiresLogin, function(req, res, next){
           req.session.reload( function (err) {
             req.session.user.last_name = userDataUpdate.last_name;
             req.session.user.first_name = userDataUpdate.first_name;
-            console.log("User updated :" +   userDataUpdate.first_name + " and " + userDataUpdate.last_name);
+            console.log("User updated first name :" + userDataUpdate.first_name + " and last name" + userDataUpdate.last_name + "\n");
           });
         });
       });
@@ -160,9 +156,7 @@ router.get('/createEvent',requiresLogin, function( req, res, next){
 
 router.post('/createEvent', requiresLogin, function( req, res, next){
   // Creation and connection
-  console.log(req.session.user);
   if (req.body.name && req.body.date && req.body.building_number && req.body.street_name && req.body.city && req.body.post_code && req.body.country_code) {
-    console.log("Var Load...");
     var eventData = {
       name: req.body.name,
       date: req.body.date,
@@ -175,13 +169,12 @@ router.post('/createEvent', requiresLogin, function( req, res, next){
         country_code : req.body.country_code
       }
     };
-    console.log(eventData);
     Eventus.create(eventData, function (err, eventus) {
-      console.log("Func create");
+
       if (err) {
         return next(err)
       } else {
-        console.log("Event created!" + eventus._id);
+        console.log("The user : " +  req.session.user.username  + " create one event. ID : " + eventus._id + "Event name : " + eventus.name + "\n");
         return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
       }
     });
@@ -197,44 +190,39 @@ router.get('/getEvent', requiresLogin, function( req, res, next){
 })
 
 router.post('/getOneEvent', requiresLogin, function( req, res, next){
-  console.log(req.session.userId + " : ask for event = " + req.body._id);
+  console.log(req.session.user.username + " : ask for event = " + req.body._id + "\n");
 
   var eventusV = {
     _id: req.body._id,
   }
 
-  console.log("#####################");
+
 
   Eventus.findOne(eventusV, function(err, eventusV){
     if (err) return handleError(err);
-    console.log(eventusV);
     req.session.event = eventusV;
-    console.log("#####################");
+    console.log("We have found one event : " + eventusV.name + " for the user : " + req.session.user.username + "\n")
   return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { eventusOne: req.session.event });
   })
 
 })
 
 router.get('/getAllEvents', requiresLogin, function( req, res, next){
-  console.log(req.session.user);
-  console.log(req.session.userId);
+
   var owner = {
     ownerUser: req.session.userId,
   }
-  console.log("#####################");
 
   Eventus.find(owner, function(err, eventus){
     if (err) return handleError(err);
-    console.log(eventus);
-    console.log("#####################");
+    console.log("Research all events by ower. The owner is : " + req.session.user.username + "\n");
+    req.session.event = eventus;
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayMyEvents.ejs', {eventusList: req.session.event});
   })
 
-  return eventus;
 })
 
 router.post('/updateEvent', requiresLogin, function( req, res, next){
-  console.log(req.body._id);
-  console.log(req.session.userId);
 
   var eventDataUpdate = {
     _id: req.body._id,
@@ -248,14 +236,13 @@ router.post('/updateEvent', requiresLogin, function( req, res, next){
       post_code: req.body.post_code,
     }
   };
-  console.log(eventDataUpdate);
 
   Eventus.findByIdAndUpdate(eventDataUpdate._id, { $set: eventDataUpdate }, function(err, eventusV) {
 
       if (err) return handleError(err);
-      req.session.event = eventusV;
-      console.log("Event updated :" +   eventDataUpdate.name );
-      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { eventusV: req.session.event });
+      req.session.event = eventDataUpdate;
+      console.log("Event updated : " +   eventDataUpdate.name + " by " + req.session.user.username + "\n" );
+      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { eventusOne: req.session.event });
 
       });
 
@@ -272,7 +259,7 @@ router.post('/getUser', requiresLogin, function(req, res, next){
   var userRequest;
 
   if( req.body.username) {
-    console.log(req.session.userId + " : request this user profile by username => " + req.body.username);
+    console.log(req.session.user.username + " : request this user profile by username => " + req.body.username + "\n");
 
     userRequest = {
       username: req.body.username,
@@ -280,13 +267,12 @@ router.post('/getUser', requiresLogin, function(req, res, next){
 
     User.findOne(userRequest, function(err, userRequest){
       if (err) return handleError(err);
-      console.log(" We found :" + userRequest);
+      console.log(" We found :" + userRequest + "\n");
       req.session.userRequest = userRequest;
-      console.log("#####################");
       return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserProfile.ejs', { userRequest: req.session.userRequest });
     })
   } else if(req.body._id) {
-    console.log(req.session.userId + " : request this user profile by _id => " + req.body._id);
+    console.log(req.session.user.username + " : request this user profile by _id => " + req.body._id + "\n");
 
     userRequest = {
       _id: req.body._id,
@@ -294,9 +280,8 @@ router.post('/getUser', requiresLogin, function(req, res, next){
 
     User.findOne(userRequest, function(err, userRequest){
       if (err) return handleError(err);
-      console.log(" We found :" + userRequest);
+      console.log(" We found :" + userRequest + "\n");
       req.session.userRequest = userRequest;
-      console.log("#####################");
       return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserProfile.ejs', { userRequest: req.session.userRequest });
     })
   }
@@ -307,16 +292,13 @@ router.get('/getUserList', requiresLogin, function(req, res, next){
 
   User.find(function(err, userList){
     if (err) return handleError(err);
-    console.log(userList);
-    console.log("#####################");
+    console.log(" We found :" + userList + "\n");
     req.session.userRequest = userList
 
     return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/userList.ejs', { userList: req.session.userList });
 
   })
 })
-
-
 
 
 module.exports = router;
