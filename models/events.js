@@ -41,7 +41,7 @@ var EventSchema = new mongoose.Schema({
     city: String,
     post_code: Number,
     country_code: Number,
-    gps_latitude: Number;
+    gps_latitude: Number,
     gps_longitude: Number,
   },
   updated: {
@@ -62,8 +62,8 @@ var EventSchema = new mongoose.Schema({
       required: false,
   },
   event_picture: {
-    link: String,
-    unique: true,
+    type: String,
+    unique: false,
     required: false,
     trim: true,
   },

@@ -14,25 +14,31 @@
 <main>
   <div class="Profile">
       <ul>
-        <li><%= userProfile._id %></li>
-        <li><%= userProfile.email %></li>
-        <li><%= userProfile.username %></li>
-        <li><%= userProfile.last_name %></li>
-        <li><%= userProfile.first_name %></li>
+        <li>Email : <%= userProfile.profile.email %></li>
+        <li>Username : <%= userProfile.username %></li>
+        <li>Last name :  <%= userProfile.profile.last_name %></li>
+        <li>First name : <%= userProfile.profile.first_name %></li>
+        <li>Description :<%= userProfile.profile.description %></li>
+        <li>Born in : <%= userProfile.profile.date %></li>
+        <li><a href="/profile/update/profile">Edit</a></li>
       </ul>
+      <form action="/profile/update/profile" method="get">
+        <input type="Submit" />
+      </form>
   </div>
 
-
-  <form action="/profile/update" method="post">
-            <p>
-                <input type="hidden" name="_id" id="_id" value=<%= userProfile._id %> />
-                <label for="first_name">First name: </label>
-                <input type="text" name="first_name" id="first_name" autofocus />
-                <label for="last_name">Last name: </label>
-                <input type="text" name="last_name" id="last_name" autofocus />
-                <input type="submit" />
-            </p>
-  </form>
+  <div class="About">
+      <ul>
+        <li>Next destination : <%= userProfile.about.next_destination %></li>
+        <li>Last destination : <%= userProfile.about.last_destination %></li>
+        <li>Last friends added :  <%= userProfile.about.last_friends_added %></li>
+        <li>From : <%= userProfile.about.from %></li>
+        <li>Job :<%= userProfile.about.job %></li>
+        <li>Company : <%= userProfile.about.company %></li>
+        <li>Living actualy in : <%= userProfile.about.living_place %></li>
+        <li><a href="/profile/update/about">Edit</a></li>
+      </ul>
+  </div>
 </main>
 
 <footer>

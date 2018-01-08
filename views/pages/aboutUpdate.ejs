@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="container">
+
+<header>
+<% include ../partials/header %>
+
+</header>
+
+<main>
+
+<form action="/profile/update/about" method="post">
+          <p>
+              <label for="next_destination">Next destination : </label>
+              <input type="text" name="next_destination" id="next_destination" autofocus value=<%= userProfile.profile.next_destination %> />
+              <label for="last_destination">Last destination: </label>
+              <input type="date" name="last_destination" id="last_destination" autofocus value=<%= userProfile.profile.last_destination %> />
+              <label for="from">From : </label>
+              <input type="text" name="from" id="from" autofocus value=<%= userProfile.profile.from %>  />
+              <label for="living_place">Actualy living on : </label>
+              <input type="text" name="living_place" id="living_place" autofocus value=<%= userProfile.profile.living_place %>  />
+              <label for="job">Job : </label>
+              <input type="text" name="job" id="job" autofocus value=<%= userProfile.profile.job %>  />
+              <label for="company">Company : </label>
+              <input type="text" name="company" id="company" autofocus value=<%= userProfile.profile.company %>  />
+              <input type="submit" />
+          </p>
+</form>
+
+</main>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>

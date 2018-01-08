@@ -50,10 +50,11 @@ router.post('/', function(req, res, next){
     if (req.body.email && req.body.username && req.body.password && req.body.passwordConf) {
 
         var userData = {
-          email: req.body.email,
           username: req.body.username,
           password: req.body.password,
-          passwordConf: req.body.passwordConf,
+          profile: {
+            email: req.body.email,
+          }
         };
 
         //use schema.create to insert data into the db
@@ -109,23 +110,27 @@ router.get('/logout', requiresLogin, function (req, res, next) {
 
 // ############## Own user profile Management ##########
 router.get('/profile', requiresLogin, function( req, res, next){
-
     return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs',  { userProfile: req.session.user} );
 })
 
+router.get('/profile/update/profile', requiresLogin, function( req, res, next){
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profileUpdate.ejs',  { userProfile: req.session.user} );
+})
+
+
 // I receive the information correctly, I ppdate correctly
-router.post('/profile/update', requiresLogin, function(req, res, next){
-      req.session.reload(function(err) {
-        req.session.userId = req.body._id;
-      });
-    if (req.body._id && req.body.first_name &&  req.body.last_name)  {
+router.post('/profile/update/profile', requiresLogin, function(req, res, next){
+
+    if (req.body.first_name &&  req.body.last_name)  {
 
       var userDataUpdate = {
-        first_name: req.body.first_name,
-        last_name: req.body.last_name
+        profile: {
+          first_name: req.body.first_name,
+          last_name: req.body.last_name,
+        }
       };
 
-      console.log("Receive :" + userDataUpdate.first_name + userDataUpdate.last_name + "\n");
+      console.log("Receive :" + userDataUpdate.profile.first_name + userDataUpdate.profile.last_name + "\n");
 
       // Creation of the account in the DataBase
       User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
@@ -133,20 +138,121 @@ router.post('/profile/update', requiresLogin, function(req, res, next){
 
         req.session.save( function(eir) {
           req.session.reload( function (err) {
-            req.session.user.last_name = userDataUpdate.last_name;
-            req.session.user.first_name = userDataUpdate.first_name;
-            console.log("User updated first name :" + userDataUpdate.first_name + " and last name" + userDataUpdate.last_name + "\n");
+            req.session.user.last_name = userDataUpdate.profile.last_name;
+            req.session.user.first_name = userDataUpdate.profile.first_name;
+            console.log("User updated first name :" + userDataUpdate.profile.first_name + " and last name" + userDataUpdate.profile.last_name + "\n");
           });
         });
       });
 
       return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
 
+    } else if ( req.body.birthday )  {
+
+        var userDataUpdate = {
+            profile: {
+              birthday: req.body.birthday,
+            }
+          };
+
+        console.log("Receive borning date :" + userDataUpdate.profile.birthday + "for user : " + req.session.user.username +  "\n");
+
+          // Creation of the account in the DataBase
+        User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
+          if (err) return handleError(err);
+          req.session.save( function(eir) {
+            req.session.reload( function (err) {
+              req.session.user.birthday = userDataUpdate.profile.birthday;
+              console.log("User updated : :" + req.session.user.username + " born date: " + req.session.user.birthday + "\n");
+            });
+          });
+        });
+    } else if ( req.body.email ) {
+
+        var userDataUpdate = {
+            profile: {
+              birthday: req.body.email,
+            }
+        };
+
+        console.log("Receive new email address :" + userDataUpdate.profile.email + "for user : " + req.session.user.username +  "\n");
+
+          // Creation of the account in the DataBase
+        User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
+          if (err) return handleError(err);
+          req.session.save( function(eir) {
+            req.session.reload( function (err) {
+              req.session.user.birthday = userDataUpdate.profile.email ;
+              console.log("User updated : :" + userDataUpdate.profile.username + " with email: " + userDataUpdate.profile.email + "\n");
+            });
+          });
+        });
+
+    }
+    else if ( req.body.description ) {
+
+        var userDataUpdate = {
+            profile: {
+              description: req.body.description,
+            }
+        };
+
+        console.log("Receive new description :" + userDataUpdate.profile.description + "for user : " + req.session.user.username +  "\n");
+
+          // Creation of the account in the DataBase
+        User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
+          if (err) return handleError(err);
+          req.session.save( function(eir) {
+            req.session.reload( function (err) {
+              req.session.user.description = userDataUpdate.profile.description ;
+              console.log("User updated : :" + userDataUpdate.profile.username + " with description : " + userDataUpdate.profile.description + "\n");
+            });
+          });
+        });
     } else {
       console.log("Bug");
     }
 
 })
+
+router.get('/profile/update/about', requiresLogin, function( req, res, next){
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/aboutUpdate.ejs',  { userProfile: req.session.user} );
+})
+
+
+// I receive the information correctly, I ppdate correctly
+router.post('/profile/update/about', requiresLogin, function(req, res, next){
+
+      var userDataUpdate = {
+        about: {
+          last_destination: req.body.last_destination,
+          next_destination: req.body.next_destination,
+          job: req.body.job,
+          company: req.body.company,
+          living_place: req.body.living_place,
+          from: req.body.from,
+        }
+      };
+
+      console.log("Receive new informations :" + userDataUpdate + "for user : " + req.session.user.username +  "\n");
+
+      // Creation of the account in the DataBase
+      User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
+        if (err) return handleError(err);
+
+        req.session.save( function(eir) {
+          req.session.reload( function (err) {
+            req.session.user.next_destination = userDataUpdate.about.next_destination;
+            console.log("User updated : :" + req.session.user.username + "\n");
+          });
+        });
+      });
+
+      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
+
+})
+
+
 // #####################################################
 
 

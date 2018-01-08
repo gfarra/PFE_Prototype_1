@@ -26,8 +26,8 @@ var UserSchema = new mongoose.Schema({
         trim: false,
       },
       profile_picture: {
-        link: String,
-        unique: true,
+        type: String,
+        unique: false,
         required: false,
         trim: true,
       },
@@ -68,6 +68,30 @@ var UserSchema = new mongoose.Schema({
         required: false,
         trim: false
       },
+      from : {
+        type: String,
+        unique: false,
+        required: false,
+        trim: false
+      },
+      job : {
+        type: String,
+        unique: false,
+        required: false,
+        trim: false
+      },
+      company : {
+        type: String,
+        unique: false,
+        required: false,
+        trim: false
+      },
+      living_place : {
+        type: String,
+        unique: false,
+        required: false,
+        trim: false
+      },
     },
     friends_list: {
       type: [mongoose.Schema.Types.ObjectId],
@@ -84,11 +108,11 @@ var UserSchema = new mongoose.Schema({
         required: false,
     },
     last_events: {
-      type: [mongoose.Schema.Types.ObjectId]
+      type: [mongoose.Schema.Types.ObjectId],
       required: false,
     },
     next_events: {
-      type: [mongoose.Schema.Types.ObjectId]
+      type: [mongoose.Schema.Types.ObjectId],
       required: false,
     },
 
