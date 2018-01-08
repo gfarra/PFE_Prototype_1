@@ -6,7 +6,7 @@ var MongoStore = require('connect-mongo')(session);
 
 var app           = express();
 var port          = 8000;
-var url           = 'mongodb://localhost:27017/db_app_trd';
+var url           = 'mongodb://localhost:27017/db_app_msg';
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');

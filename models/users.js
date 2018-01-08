@@ -2,42 +2,97 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 
 var UserSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-    trim: true
-  },
   username: {
     type: String,
     unique: true,
     required: true,
-    trim: true
-  },
-  first_name: {
-    type: String,
-    unique: false,
-    required: false,
-  },
-  last_name: {
-    type: String,
-    unique: false,
-    required: false,
-  },
-  age: {
-    type: Number,
-    unique: false,
-    required: false,
-    trim: true
+    trim: true,
   },
   password: {
     type: String,
     required: true,
   },
-  passwordConf: {
-    type: String,
-    required: true,
-  }
+  profile:{
+      first_name: {
+        type: String,
+        unique: false,
+        required: false,
+        trim: false,
+      },
+      last_name: {
+        type: String,
+        unique: false,
+        required: false,
+        trim: false,
+      },
+      profile_picture: {
+        link: String,
+        unique: true,
+        required: false,
+        trim: true,
+      },
+      birthday: {
+        type: Date,
+        unique: false,
+        required: false,
+      },
+      email: {
+        type: String,
+        unique: true,
+        required: true,
+        trim: true,
+      },
+      description: {
+        type: String,
+        unique: false,
+        required: false,
+        trim: false,
+      },
+    },
+    about: {
+      next_destination: {
+        type: String,
+        unique: false,
+        required: false,
+        trim: true,
+      },
+      last_destination: {
+        type: String,
+        unique: false,
+        required: false,
+        trim: false,
+      },
+      last_friends_added: {
+        type: [mongoose.Schema.Types.ObjectId],
+        unique: false,
+        required: false,
+        trim: false
+      },
+    },
+    friends_list: {
+      type: [mongoose.Schema.Types.ObjectId],
+      unique: false,
+      required: false,
+      trim: false,
+    },
+    pictures : {
+        type: [String],
+        required: false,
+    },
+    visited_country_list: {
+        type: [Number],
+        required: false,
+    },
+    last_events: {
+      type: [mongoose.Schema.Types.ObjectId]
+      required: false,
+    },
+    next_events: {
+      type: [mongoose.Schema.Types.ObjectId]
+      required: false,
+    },
+
+
 });
 
 //authenticate input against database
