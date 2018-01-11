@@ -12,6 +12,12 @@ var UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+    unique: true,
+    required: true,
+    trim: true,
+  },
   profile:{
       first_name: {
         type: String,
@@ -35,12 +41,6 @@ var UserSchema = new mongoose.Schema({
         type: Date,
         unique: false,
         required: false,
-      },
-      email: {
-        type: String,
-        unique: true,
-        required: true,
-        trim: true,
       },
       description: {
         type: String,
@@ -115,8 +115,6 @@ var UserSchema = new mongoose.Schema({
       type: [mongoose.Schema.Types.ObjectId],
       required: false,
     },
-
-
 });
 
 //authenticate input against database

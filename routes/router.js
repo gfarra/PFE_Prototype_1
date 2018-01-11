@@ -49,11 +49,18 @@ router.post('/', function(req, res, next){
     // Creation and connection
     if (req.body.email && req.body.username && req.body.password && req.body.passwordConf) {
 
+        var birthdayDate = new Date(2000, 1, 1, 0, 0, 0, 0);
+
         var userData = {
           username: req.body.username,
           password: req.body.password,
-          profile: {
-            email: req.body.email,
+          email: req.body.email,
+          profile : {
+            first_name: ' ',
+            last_name: ' ',
+            description: ' ',
+            first_name: ' ',
+            birthday: birthdayDate,
           }
         };
 
@@ -121,12 +128,15 @@ router.get('/profile/update/profile', requiresLogin, function( req, res, next){
 // I receive the information correctly, I ppdate correctly
 router.post('/profile/update/profile', requiresLogin, function(req, res, next){
 
-    if (req.body.first_name &&  req.body.last_name)  {
-
-      var userDataUpdate = {
+      var userDataUpdate = req.session.user;
+      console.log(req.session.user);
+      userDataUpdate = {
         profile: {
           first_name: req.body.first_name,
           last_name: req.body.last_name,
+          birthday: req.body.birthday,
+          email: req.body.email,
+          description: req.body.description,
         }
       };
 
@@ -138,80 +148,13 @@ router.post('/profile/update/profile', requiresLogin, function(req, res, next){
 
         req.session.save( function(eir) {
           req.session.reload( function (err) {
-            req.session.user.last_name = userDataUpdate.profile.last_name;
-            req.session.user.first_name = userDataUpdate.profile.first_name;
-            console.log("User updated first name :" + userDataUpdate.profile.first_name + " and last name" + userDataUpdate.profile.last_name + "\n");
+            req.session.user = userDataUpdate;
+            console.log("User updated first name :" + userDataUpdate.profile + "\n");
           });
         });
       });
 
       return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
-
-    } else if ( req.body.birthday )  {
-
-        var userDataUpdate = {
-            profile: {
-              birthday: req.body.birthday,
-            }
-          };
-
-        console.log("Receive borning date :" + userDataUpdate.profile.birthday + "for user : " + req.session.user.username +  "\n");
-
-          // Creation of the account in the DataBase
-        User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
-          if (err) return handleError(err);
-          req.session.save( function(eir) {
-            req.session.reload( function (err) {
-              req.session.user.birthday = userDataUpdate.profile.birthday;
-              console.log("User updated : :" + req.session.user.username + " born date: " + req.session.user.birthday + "\n");
-            });
-          });
-        });
-    } else if ( req.body.email ) {
-
-        var userDataUpdate = {
-            profile: {
-              birthday: req.body.email,
-            }
-        };
-
-        console.log("Receive new email address :" + userDataUpdate.profile.email + "for user : " + req.session.user.username +  "\n");
-
-          // Creation of the account in the DataBase
-        User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
-          if (err) return handleError(err);
-          req.session.save( function(eir) {
-            req.session.reload( function (err) {
-              req.session.user.birthday = userDataUpdate.profile.email ;
-              console.log("User updated : :" + userDataUpdate.profile.username + " with email: " + userDataUpdate.profile.email + "\n");
-            });
-          });
-        });
-
-    }
-    else if ( req.body.description ) {
-
-        var userDataUpdate = {
-            profile: {
-              description: req.body.description,
-            }
-        };
-
-        console.log("Receive new description :" + userDataUpdate.profile.description + "for user : " + req.session.user.username +  "\n");
-
-          // Creation of the account in the DataBase
-        User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
-          if (err) return handleError(err);
-          req.session.save( function(eir) {
-            req.session.reload( function (err) {
-              req.session.user.description = userDataUpdate.profile.description ;
-              console.log("User updated : :" + userDataUpdate.profile.username + " with description : " + userDataUpdate.profile.description + "\n");
-            });
-          });
-        });
-    } else {
-      console.log("Bug");
-    }
 
 })
 
@@ -223,7 +166,9 @@ router.get('/profile/update/about', requiresLogin, function( req, res, next){
 // I receive the information correctly, I ppdate correctly
 router.post('/profile/update/about', requiresLogin, function(req, res, next){
 
-      var userDataUpdate = {
+      var userDataUpdate = req.session.user;
+      console.log(req.session.user);
+      userDataUpdate = {
         about: {
           last_destination: req.body.last_destination,
           next_destination: req.body.next_destination,
@@ -242,7 +187,7 @@ router.post('/profile/update/about', requiresLogin, function(req, res, next){
 
         req.session.save( function(eir) {
           req.session.reload( function (err) {
-            req.session.user.next_destination = userDataUpdate.about.next_destination;
+            req.session.user = userDataUpdate;
             console.log("User updated : :" + req.session.user.username + "\n");
           });
         });

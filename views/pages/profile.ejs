@@ -14,17 +14,14 @@
 <main>
   <div class="Profile">
       <ul>
-        <li>Email : <%= userProfile.profile.email %></li>
+        <li>Email : <%= userProfile.email %></li>
         <li>Username : <%= userProfile.username %></li>
         <li>Last name :  <%= userProfile.profile.last_name %></li>
         <li>First name : <%= userProfile.profile.first_name %></li>
         <li>Description :<%= userProfile.profile.description %></li>
-        <li>Born in : <%= userProfile.profile.date %></li>
+        <li>Born in : <%= userProfile.profile.birthday %></li>
         <li><a href="/profile/update/profile">Edit</a></li>
       </ul>
-      <form action="/profile/update/profile" method="get">
-        <input type="Submit" />
-      </form>
   </div>
 
   <div class="About">
