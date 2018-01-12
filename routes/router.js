@@ -208,11 +208,14 @@ router.get('/createEvent',requiresLogin, function( req, res, next){
 
 router.post('/createEvent', requiresLogin, function( req, res, next){
   // Creation and connection
-  if (req.body.name && req.body.date && req.body.building_number && req.body.street_name && req.body.city && req.body.post_code && req.body.country_code) {
+  if (req.body.name && req.body.description && req.body.date ) {
     var eventData = {
       name: req.body.name,
       date: req.body.date,
+      description: req.body.description,
       ownerUser: req.session.userId,
+      administrator: req.session.userId,
+      participants: req.session.userId,
       address: {
         building_number: req.body.building_number,
         street_name: req.body.street_name,
@@ -227,8 +230,8 @@ router.post('/createEvent', requiresLogin, function( req, res, next){
         return next(err)
       } else {
         req.session.event = eventus;
-        console.log("The user : " +  req.session.user.username  + " create one event. ID : " + eventus._id + "Event name : " + eventus.name + "\n");
-        return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { eventusOne: req.session.event });
+        console.log("The user : " +  req.session.user.username  + " create one event. ID : " + eventus.name + "Event name : " + eventus.name + "\n");
+        return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/eventUpdate.ejs', { eventusOne: req.session.event });
       }
     });
   } else {
@@ -274,28 +277,32 @@ router.get('/getAllEvents', requiresLogin, function( req, res, next){
 
 router.post('/updateEvent', requiresLogin, function( req, res, next){
 
-  var eventDataUpdate = {
-    _id: req.body._id,
-    name: req.body.name,
-    date: req.body.date,
-    ownerUser: req.session.userId,
-    address: {
-      building_number: req.body.building_number,
-      street_name: req.body.street_name,
-      city: req.body.city,
-      post_code: req.body.post_code,
-    }
-  };
+  var updateHour = Date.now();
+  if (req.body.name && req.body.description && req.body.date ) {
+    var eventDataUpdate = {
+      name: req.body.name,
+      date: req.body.date,
+      description: req.body.description,
+      address: {
+        building_number: req.body.building_number,
+        street_name: req.body.street_name,
+        city: req.body.city,
+        post_code: req.body.post_code,
+        country_code : req.body.country_code,
+      },
+      updated : updateHour,
+    };
 
-  Eventus.findByIdAndUpdate(eventDataUpdate._id, { $set: eventDataUpdate }, function(err, eventusV) {
+  Eventus.findByIdAndUpdate(req.body._id, { $set: eventDataUpdate }, function(err, eventusV) {
 
       if (err) return handleError(err);
       req.session.event = eventDataUpdate;
+      req.session.event._id = req.body._id;
       console.log("Event updated : " +   eventDataUpdate.name + " by " + req.session.user.username + "\n" );
       return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { eventusOne: req.session.event });
 
       });
-
+    }
 })
 
 
@@ -321,9 +328,13 @@ router.get('/getUser', requiresLogin, function(req, res, next){
 router.post('/getUser', requiresLogin, function(req, res, next){
   var userRequest;
 
-  if( req.body.username) {
-    console.log(req.session.user.username + " : request this user profile by username => " + req.body.username + "\n");
 
+
+
+  if( req.body.username) {
+    req.body.username = req.body.username.replace('/','');
+    
+    console.log(req.session.user.username + " : request this user profile by username => " + req.body.username + "\n");
     userRequest = {
       username: req.body.username,
     }

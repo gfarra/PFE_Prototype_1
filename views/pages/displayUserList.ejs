@@ -8,15 +8,30 @@
 
 <header>
   <% include ../partials/header %>
-
+  <script type="text/javascript" src="./js/submit_javascript.js">  </script>
 </header>
 
 <main>
-  <div class="UserList">
-    <%- JSON.stringify(userList) %>
-  </div>
-</main>
 
+<div class="main">
+
+  <% for(var i=0; i < userList.length; i++) { %>
+    <form action="/getUser" method="post" name="submit_username" id="<%= i %>" >
+
+
+    <label>User name :</label><br/>
+    <input type="text" name="username" id="username"  value=<%= userList[i].username %> readonly /><br/>
+
+    <label>Email :</label><br/>
+    <input type="text" name="email" id="email"  value=<%= userList[i].email %> readonly   /> <br/>
+
+    <button onclick="submit_by_id();"> Cliquez </button>
+
+    </form>
+  <% } %>
+
+</div>
+</main>
 <footer>
     <% include ../partials/footer %>
 </footer>

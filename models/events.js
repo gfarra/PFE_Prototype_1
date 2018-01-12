@@ -5,13 +5,13 @@ var EventSchema = new mongoose.Schema({
     type: String,
     unique: false,
     required: true,
-    trim: false,
+    trim: true,
   },
   description: {
     type: String,
     unique: false,
     required: false,
-    trim: false,
+    trim: true,
   },
   ownerUser: {
     type: String,

@@ -14,14 +14,26 @@
 <main>
   <div class="Profile">
       <ul>
-        <li><%= userRequest._id %></li>
-        <li><%= userRequest.username %></li>
-        <li><%= userRequest.first_name %></li>
-        <li><%= userRequest.last_name %></li>
-        <li><%= userRequest.email %></li>
+        <li>Email : <%= userRequest.email %></li>
+        <li>Username : <%= userRequest.username %></li>
+        <li>Last name :  <%= userRequest.profile.last_name %></li>
+        <li>First name : <%= userRequest.profile.first_name %></li>
+        <li>Description :<%= userRequest.profile.description %></li>
+        <li>Born in : <%= userRequest.profile.birthday %></li>
       </ul>
   </div>
 
+  <div class="About">
+      <ul>
+        <li>Next destination : <%= userRequest.about.next_destination %></li>
+        <li>Last destination : <%= userRequest.about.last_destination %></li>
+        <li>Last friends added :  <%= userRequest.about.last_friends_added %></li>
+        <li>From : <%= userRequest.about.from %></li>
+        <li>Job :<%= userRequest.about.job %></li>
+        <li>Company : <%= userRequest.about.company %></li>
+        <li>Living actualy in : <%= userRequest.about.living_place %></li>
+      </ul>
+  </div>
 </main>
 
 <footer>
