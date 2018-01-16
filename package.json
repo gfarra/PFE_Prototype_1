@@ -21,10 +21,13 @@
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.1",
     "connect-mongo": "^1.3.2",
+    "cropit": "^0.5.1",
     "ejs": "^2.5.7",
     "express": "^4.15.2",
     "express-session": "^1.15.2",
+    "file-system": "^2.2.2",
     "mongoose": "^4.9.8",
+    "multer": "^1.3.0",
     "nodemon": "^1.11.0"
   }
 }

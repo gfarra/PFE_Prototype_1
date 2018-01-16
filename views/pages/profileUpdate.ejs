@@ -16,16 +16,15 @@
 <form action="/profile/update/profile" method="post">
           <p>
               <label for="first_name">First name: </label>
-              <input type="text" name="first_name" id="first_name" autofocus value=<%= userProfile.profile.first_name %> />
+              <input type="text" name="first_name" id="first_name"  value="<%= userProfile.profile.first_name %>" autofocus />
               <label for="last_name">Last name: </label>
-              <input type="text" name="last_name" id="last_name" autofocus value=<%= userProfile.profile.last_name %> />
+              <input type="text" name="last_name" id="last_name"  value="<%= userProfile.profile.last_name %>" autofocus />
               <label for="birthday">Born date: </label>
-              <input type="date" name="birthday" id="birthday" autofocus value=<%= userProfile.profile.birthday %> />
+              <input type="date" name="birthday" id="birthday"  value="<%= userProfile.profile.birthday %>" autofocus />
               <label for="email">Email : </label>
-              <input type="email" name="email" id="email" autofocus value=<%= userProfile.email %>  />
-              <input type="submit" />
+              <input type="email" name="email" id="email"  value="<%= userProfile.email %>" autofocus />
               <label for="description">Description: </label>
-              <input type="text" name="description" id="description" autofocus value=<%= userProfile.profile.description %>  />
+              <input type="text" name="description" id="description"  value="<%= userProfile.profile.description %>" autofocus />
               <input type="submit" />
           </p>
 </form>

@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <% include ../partials/head %>
+
 </head>
 <body class="container">
 
@@ -10,8 +11,22 @@
 <% include ../partials/header %>
 
 </header>
-
 <main>
+
+  <div class="Profile_picture">
+    <img src=<%= userProfile.profile_picture %> >
+
+    <form id        =  "uploadForm"
+         enctype   =  "multipart/form-data"
+         action    =  "/profile/picture"
+         method    =  "post"
+    >
+    <input type="file" name="userPhoto" />
+    <input type="submit" value="Upload Image" name="submit">
+    </form>
+
+  </div>
+
   <div class="Profile">
       <ul>
         <li>Email : <%= userProfile.email %></li>
@@ -20,6 +35,7 @@
         <li>First name : <%= userProfile.profile.first_name %></li>
         <li>Description :<%= userProfile.profile.description %></li>
         <li>Born in : <%= userProfile.profile.birthday %></li>
+        <img src=<%= userProfile.profile_picture %> >
         <li><a href="/profile/update/profile">Edit</a></li>
       </ul>
   </div>
@@ -36,6 +52,7 @@
         <li><a href="/profile/update/about">Edit</a></li>
       </ul>
   </div>
+
 </main>
 
 <footer>

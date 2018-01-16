@@ -18,6 +18,10 @@ var UserSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
+  profile_picture: {
+    data: Buffer,
+    contentType: String,
+  },
   profile:{
       first_name: {
         type: String,
@@ -30,12 +34,6 @@ var UserSchema = new mongoose.Schema({
         unique: false,
         required: false,
         trim: false,
-      },
-      profile_picture: {
-        type: String,
-        unique: false,
-        required: false,
-        trim: true,
       },
       birthday: {
         type: Date,

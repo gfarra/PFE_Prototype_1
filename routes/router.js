@@ -1,6 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/users');
+var fs = require('file-system');
+var multer = require('multer');
+
+var storage =   multer.diskStorage({
+  destination: function (req, file, callback) {
+    callback(null, 'C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/uploads');
+  },
+  filename: function (req, file, callback) {
+    callback(null, file.fieldname + '-' + Date.now());
+  }
+});
+var upload = multer({ storage : storage}).single('userPhoto');
 
 var Eventus = require ('../models/events');
 
@@ -56,10 +68,10 @@ router.post('/', function(req, res, next){
           password: req.body.password,
           email: req.body.email,
           profile : {
-            first_name: ' ',
-            last_name: ' ',
-            description: ' ',
-            first_name: ' ',
+            first_name: '',
+            last_name: '',
+            description: '',
+            first_name: '',
             birthday: birthdayDate,
           }
         };
@@ -197,6 +209,45 @@ router.post('/profile/update/about', requiresLogin, function(req, res, next){
 
 })
 
+// Get profile picture
+router.post('/profile/picture',  requiresLogin, function(req, res, next){
+
+
+  var userDataUpdate = req.session.user;
+
+  /* console.log("Picture session : " + req.file.image.path);
+  userDataUpdate = req.session.user;
+  userDataUpdate = {
+    profile_picture: fs.readFileSync(req.file.path),
+    contentType: 'image/jpg',
+  };
+  console.log("Picture session : " + userDataUpdate);
+  User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
+    if (err) return handleError(err);
+
+    req.session.save( function(eir) {
+      req.session.reload( function (err) {
+        req.session.user = userDataUpdate;
+        console.log("User updated : :" + req.file + "\n");
+      });
+    });
+  });
+
+
+  */
+  upload(req,res,function(err) {
+      if(err) {
+          return res.end("Error uploading file.");
+      }
+
+      console.log("User updated : :" + Object.values(req.file) + "\n");
+      res.end("File is uploaded");
+  });
+});
+
+
+
+
 
 // #####################################################
 
@@ -333,7 +384,7 @@ router.post('/getUser', requiresLogin, function(req, res, next){
 
   if( req.body.username) {
     req.body.username = req.body.username.replace('/','');
-    
+
     console.log(req.session.user.username + " : request this user profile by username => " + req.body.username + "\n");
     userRequest = {
       username: req.body.username,
