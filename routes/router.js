@@ -240,8 +240,25 @@ router.post('/profile/picture',  requiresLogin, function(req, res, next){
           return res.end("Error uploading file.");
       }
 
-      console.log("User updated : :" + Object.values(req.file) + "\n");
-      res.end("File is uploaded");
+      console.log("User updated :" + req.file.path + "\n");
+      userDataUpdate = {
+        profile_picture: fs.readFileSync(req.file.path),
+        contentType: 'image/jpg',
+      };
+
+      User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
+        if (err) return handleError(err);
+
+        req.session.save( function(eir) {
+          req.session.reload( function (err) {
+            req.session.user = userDataUpdate;
+            console.log("User updated : :" + req.session.userId + "\n");
+          });
+        });
+      });
+
+      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
+
   });
 });
 
