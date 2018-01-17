@@ -14,18 +14,17 @@
 <main>
 
   <div class="Profile_picture">
-    <img src=<%= userProfile.profile_picture %> >
+    <img src="data:image/jpg;base64,<%= userProfile.profile_picture %>" >
+    <img src="data:{{image.contentType}};base64,{{<%= userProfile.profile_picture %>}}">
 
-    <form id        =  "uploadForm"
-         enctype   =  "multipart/form-data"
-         action    =  "/profile/picture"
-         method    =  "post"
-    >
-    <input type="file" name="userPhoto" />
-    <input type="submit" value="Upload Image" name="submit">
+    <form id="uploadForm" enctype="multipart/form-data" action="/profile/picture" method="post">
+      <input type="file" name="userPhoto" />
+      <input type="submit" value="Upload Image" name="submit">
     </form>
 
   </div>
+
+<img src="data:image/jpg;base64,<s:property value='<%= userProfile.profile_picture %>'/>"
 
   <div class="Profile">
       <ul>
@@ -35,7 +34,6 @@
         <li>First name : <%= userProfile.profile.first_name %></li>
         <li>Description :<%= userProfile.profile.description %></li>
         <li>Born in : <%= userProfile.profile.birthday %></li>
-        <img src=<%= userProfile.profile_picture %> >
         <li><a href="/profile/update/profile">Edit</a></li>
       </ul>
   </div>
@@ -43,7 +41,7 @@
   <div class="About">
       <ul>
         <li>Next destination : <%= userProfile.about.next_destination %></li>
-        <li>Last destination : <%= userProfile.about.last_destination %></li>
+        <li>Previous destination : <%= userProfile.about.last_destination %></li>
         <li>Last friends added :  <%= userProfile.about.last_friends_added %></li>
         <li>From : <%= userProfile.about.from %></li>
         <li>Job :<%= userProfile.about.job %></li>
