@@ -3,28 +3,35 @@
 <head>
     <% include ../partials/head %>
 </head>
-<body class="container">
 
-  <header>
-  <% include ../partials/header_log_in %>
+<header>
+    <% include ../partials/header_log_in %>
+</header>
 
-  </header>
+<body>
+
+  <div class="container">
+
+    <form class="form-signin" action="/" method="post">
+      <h2 class="form-signin-heading">Please sign in</h2>
+      <label for="logmail" class="sr-only">Email address</label>
+      <input type="email" name="logmail" id="logmail" class="form-control" placeholder="Email address" required autofocus>
+      <label for="logpassword" class="sr-only">Password</label>
+      <input type="password" name="logpassword" id="logpassword" class="form-control" placeholder="Password" required>
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+
+  </div> <!-- /container -->
+
+</body>
 
 <footer>
     <% include ../partials/footer %>
 </footer>
 
-<main>
-  <form action="/" method="post">
-            <p>
-                <label for="logmail">Email: </label>
-                <input type="text" name="logmail" id="logmail" autofocus />
-                <label for="logpassword">Password: </label>
-                <input type="password" name="logpassword" id="logpassword" autofocus />
-                <input type="submit" />
-            </p>
-  </form>
-</main>
-
-</body>
 </html>
