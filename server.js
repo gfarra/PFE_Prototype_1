@@ -23,6 +23,8 @@ db.once('open', function () {
   console.log("We're connected!");
 });
 
+app.use(express.static(__dirname + '/public'));
+
 //use sessions for tracking logins
 app.use(session({
   secret: 'work hard',

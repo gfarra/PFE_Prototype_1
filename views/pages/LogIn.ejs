@@ -2,18 +2,21 @@
 <html lang="en">
 <head>
     <% include ../partials/head %>
+    <!-- Custom styles for this template -->
+    <link href="/style/signin.css" rel="stylesheet">
 </head>
+<body class="container">
 
 <header>
     <% include ../partials/header_log_in %>
 </header>
 
-<body>
 
-  <div class="container">
+
+  <div >
 
     <form class="form-signin" action="/" method="post">
-      <h2 class="form-signin-heading">Please sign in</h2>
+      <h2 class="form-signin-heading">Authentification</h2>
       <label for="logmail" class="sr-only">Email address</label>
       <input type="email" name="logmail" id="logmail" class="form-control" placeholder="Email address" required autofocus>
       <label for="logpassword" class="sr-only">Password</label>
