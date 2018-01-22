@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <% include ../partials/head %>
+    <link href="/style/event.css" rel="stylesheet">
 </head>
 <body class="container">
 
@@ -15,15 +16,15 @@
 
 <div class="main">
 
-  <% for(var i=0; i < userList.length; i++) { %>
+  <% for(var i=0; i < userProfile.userList.length; i++) { %>
     <form action="/getUser" method="post" name="submit_username" id="<%= i %>" >
 
 
     <label>User name :</label><br/>
-    <input type="text" name="username" id="username"  value=<%= userList[i].username %> readonly /><br/>
+    <input type="text" name="username" id="username"  value=<%= userProfile.userList[i].username %> readonly /><br/>
 
     <label>Email :</label><br/>
-    <input type="text" name="email" id="email"  value=<%= userList[i].email %> readonly /> <br/>
+    <input type="text" name="email" id="email"  value=<%= userProfile.userList[i].email %> readonly /> <br/>
 
     <button onclick="submit_by_id();"> Cliquez </button>
 

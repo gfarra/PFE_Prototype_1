@@ -242,10 +242,6 @@ router.post('/profile/picture',  requiresLogin, function(req, res, next){
   });
 });
 
-
-
-
-
 // #####################################################
 
 
@@ -373,12 +369,15 @@ router.get('/getEventList', requiresLogin, function(req, res, next){
 // ################ user management ####################
 
 router.get('/getUser', requiresLogin, function(req, res, next){
-  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/getUser.ejs')
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/getUser.ejs', { userProfile: req.session.user })
 })
 
-router.post('/getUser', requiresLogin, function(req, res, next){
+router.get('/getUsername', requiresLogin, function(req, res, next){
   var userRequest;
-
+  var url = require('url');
+  var url_parts = url.parse(request.url, true);
+  var query = url_parts.query;
+  
   if( req.body.username) {
     req.body.username = req.body.username.replace('/','');
 
@@ -390,8 +389,8 @@ router.post('/getUser', requiresLogin, function(req, res, next){
     User.findOne(userRequest, function(err, userRequest){
       if (err) return handleError(err);
       console.log(" We found :" + userRequest + "\n");
-      req.session.userRequest = userRequest;
-      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserProfile.ejs', { userRequest: req.session.userRequest });
+      req.session.user.userRequest = userRequest;
+      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserProfile.ejs', { userProfile: req.session.user });
     })
   } else if(req.body._id) {
     console.log(req.session.user.username + " : request this user profile by _id => " + req.body._id + "\n");
@@ -403,8 +402,8 @@ router.post('/getUser', requiresLogin, function(req, res, next){
     User.findOne(userRequest, function(err, userRequest){
       if (err) return handleError(err);
       console.log(" We found :" + userRequest + "\n");
-      req.session.userRequest = userRequest;
-      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserProfile.ejs', { userRequest: req.session.userRequest });
+      req.session.user.userRequest = userRequest;
+      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserProfile.ejs', { userProfile: req.session.user });
     })
   }
 })
@@ -414,10 +413,10 @@ router.get('/getUserList', requiresLogin, function(req, res, next){
   User.find(function(err, userListRequest){
     if (err) return handleError(err);
     console.log(" We found :" + userListRequest + "\n");
-    req.session.userRequest = userListRequest;
-    console.log(" We found :" + req.session.userRequest + "\n");
+    req.session.user.userList = userListRequest;
+    console.log(" We found :" + req.session.user.userRequest + "\n");
 
-    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserList.ejs', { userList: req.session.userRequest });
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserList.ejs', { userProfile: req.session.user });
   })
 
 

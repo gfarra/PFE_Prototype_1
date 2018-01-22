@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <% include ../partials/head %>
+    <link href="/style/event.css" rel="stylesheet">
 </head>
 <body class="container">
 
@@ -11,30 +12,39 @@
 
 </header>
 
-<main>
-  <div class="Profile">
-      <ul>
-        <li>Email : <%= userRequest.email %></li>
-        <li>Username : <%= userRequest.username %></li>
-        <li>Last name :  <%= userRequest.profile.last_name %></li>
-        <li>First name : <%= userRequest.profile.first_name %></li>
-        <li>Description :<%= userRequest.profile.description %></li>
-        <li>Born in : <%= userRequest.profile.birthday %></li>
-      </ul>
-  </div>
+<div class="User_Profile">
+  <div class="row">
+    <section class="col-sm-3">
+      <img src="data:image/jpg;base64,<%=  userProfile.userRequest.profile_picture %>" class="img-thumbnail">
+      </form>
+      </br>
+      <div class="Profile_Inforation">
+        <ul class="list-group">
+          <li class="list-group-item">Email: <%=  userProfile.userRequest.email %></li>
+          <li class="list-group-item">Username: <%=  userProfile.userRequest.username %></li>
+          <li class="list-group-item">Full name: <%=  userProfile.userRequest.profile.first_name %> <%=  userProfile.userRequest.profile.last_name %></li>
+          <li class="list-group-item">Description: <%=  userProfile.userRequest.profile.description %></li>
+          <li class="list-group-item">Born in: <%=  userProfile.userRequest.profile.birthday %></li>
+        </ul>
+      </div>
+    </section>
+    <div class="col-sm-6">
 
-  <div class="About">
-      <ul>
-        <li>Next destination : <%= userRequest.about.next_destination %></li>
-        <li>Last destination : <%= userRequest.about.last_destination %></li>
-        <li>Last friends added :  <%= userRequest.about.last_friends_added %></li>
-        <li>From : <%= userRequest.about.from %></li>
-        <li>Job :<%= userRequest.about.job %></li>
-        <li>Company : <%= userRequest.about.company %></li>
-        <li>Living actualy in : <%= userRequest.about.living_place %></li>
-      </ul>
+    </div>
+    <div class="col-sm-3">
+      <div class="Profile_About">
+          <ul class="list-group">
+            <li class="list-group-item">Next destination: <%=  userProfile.userRequest.about.next_destination %></li>
+            <li class="list-group-item">Previous destination: <%=  userProfile.userRequest.about.last_destination %></li>
+            <li class="list-group-item">From: <%=  userProfile.userRequest.about.from %></li>
+            <li class="list-group-item">Job: <%=  userProfile.userRequest.about.job %>, Company : <%=  userProfile.userRequest.about.company %></li>
+            <li class="list-group-item">Living actualy in: <%=  userProfile.userRequest.about.living_place %></li>
+          </ul>
+      </div>
+
+    </div>
   </div>
-</main>
+</div>
 
 <footer>
     <% include ../partials/footer %>

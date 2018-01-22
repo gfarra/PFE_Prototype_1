@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <% include ../partials/head %>
+    <link href="/style/event.css" rel="stylesheet">
 </head>
 <body class="container">
 
@@ -11,19 +12,10 @@
   </header>
 
 <main>
-  <form action="/getUser" method="post">
-            <p>
-                <label for="_id">Event Id: </label>
-                <input type="text" name="_id" id="_id" autofocus />
-                <input type="submit" />
-            </p>
-  </form>
-  <form action="/getUser" method="post">
-            <p>
+  <form action="/getUsername" method="get">
                 <label for="username">User name: </label>
                 <input type="text" name="username" id="username" autofocus />
                 <input type="submit" />
-            </p>
   </form>
 </main>
 
