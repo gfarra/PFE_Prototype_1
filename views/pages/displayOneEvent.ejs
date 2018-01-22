@@ -14,12 +14,12 @@
 <main>
   <div class="Eventus">
       <ul>
-        <li>Id :<%= eventusOne._id %></li>
-        <li>Name : <%= eventusOne.name %></li>
-        <li>Date : <%= eventusOne.date %></li>
-        <li>Update day: <%= eventusOne.updated %></li>
-        <li>Description : <%= eventusOne.description %></li>
-        <li>Adresse :<%- JSON.stringify(eventusOne.address) %></li>
+        <li>Id :<%= userProfile.event._id %></li>
+        <li>Name : <%= userProfile.event.name %></li>
+        <li>Date : <%= userProfile.event.date %></li>
+        <li>Update day: <%= userProfile.event.updated %></li>
+        <li>Description : <%= userProfile.event.description %></li>
+        <li>Adresse :<%- JSON.stringify(userProfile.event.address) %></li>
       </ul>
   </div>
 
@@ -28,31 +28,31 @@
     <form action="/updateEvent" method="post">
               <p>
                   <label for="_id">Event ID : </label>  <br/>
-                  <input type="text" name="_id" id="_id"  value=<%= eventusOne._id %> readonly />  <br/>
+                  <input type="text" name="_id" id="_id"  value=<%= userProfile.event._id %> readonly />  <br/>
 
                   <label for="name">Name : </label>  <br/>
-                  <input type="text" name="name" id="name"  value=<%= eventusOne.name %> autofocus />  <br/>
+                  <input type="text" name="name" id="name"  value=<%= userProfile.event.name %> autofocus />  <br/>
 
                   <label for="description">Description: </label>  <br/>
-                  <input type="text" name="description" id="description"  value=<%= eventusOne.description %> autofocus />  <br/>
+                  <input type="text" name="description" id="description"  value=<%= userProfile.event.description %> autofocus />  <br/>
 
                   <label for="date">Date: </label>  <br/>
-                  <input type="date" name="date" id="date"  value=<%= eventusOne.date %> autofocus />  <br/>
+                  <input type="date" name="date" id="date"  value=<%= userProfile.event.date %> autofocus />  <br/>
 
                   <label for="building_number">Building number : </label>  <br/>
-                  <input type="number" name="building_number" id="building_number"  value=<%= eventusOne.address.building_number %> autofocus  />  <br/>
+                  <input type="number" name="building_number" id="building_number"  value=<%= userProfile.event.address.building_number %> autofocus  />  <br/>
 
                   <label for="street_name">Street: </label>  <br/>
-                  <input type="text" name="street_name" id="street_name"  value=<%= eventusOne.address.street_name %> autofocus />  <br/>
+                  <input type="text" name="street_name" id="street_name"  value=<%= userProfile.event.address.street_name %> autofocus />  <br/>
 
                   <label for="city">city: </label>  <br/>
-                  <input type="text" name="city" id="city"  value=<%= eventusOne.address.city %> autofocus />  <br/>
+                  <input type="text" name="city" id="city"  value=<%= userProfile.event.address.city %> autofocus />  <br/>
 
                   <label for="post_code">Post code: </label>  <br/>
-                  <input type="number" name="post_code" id="post_code"  value=<%= eventusOne.address.post_code %> autofocus />  <br/>
+                  <input type="number" name="post_code" id="post_code"  value=<%= userProfile.event.address.post_code %> autofocus />  <br/>
 
                   <label for="country_code">Country code: </label>  <br/>
-                  <input type="number" name="country_code" id="country_code"  value=<%= eventusOne.address.country_code %> autofocus />  <br/>
+                  <input type="number" name="country_code" id="country_code"  value=<%= userProfile.event.address.country_code %> autofocus />  <br/>
 
                   <input type="submit" />
               </p>

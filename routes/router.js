@@ -215,26 +215,6 @@ router.post('/profile/picture',  requiresLogin, function(req, res, next){
 
   var userDataUpdate = req.session.user;
 
-  /* console.log("Picture session : " + req.file.image.path);
-  userDataUpdate = req.session.user;
-  userDataUpdate = {
-    profile_picture: fs.readFileSync(req.file.path),
-    contentType: 'image/jpg',
-  };
-  console.log("Picture session : " + userDataUpdate);
-  User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
-    if (err) return handleError(err);
-
-    req.session.save( function(eir) {
-      req.session.reload( function (err) {
-        req.session.user = userDataUpdate;
-        console.log("User updated : :" + req.file + "\n");
-      });
-    });
-  });
-
-
-  */
   upload(req,res,function(err) {
       if(err) {
           return res.end("Error uploading file.");
@@ -271,11 +251,13 @@ router.post('/profile/picture',  requiresLogin, function(req, res, next){
 
 // ################# Event management ##################
 router.get('/createEvent',requiresLogin, function( req, res, next){
-  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/createEvent.ejs');
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/createEvent.ejs', { userProfile: req.session.user} );
 })
 
 router.post('/createEvent', requiresLogin, function( req, res, next){
   // Creation and connection
+  console.log("The user : " + req.body.name  + " create one event. ID : " + req.body.description + "Event name : " + req.body.date + "\n");
+
   if (req.body.name && req.body.description && req.body.date ) {
     var eventData = {
       name: req.body.name,
@@ -297,33 +279,33 @@ router.post('/createEvent', requiresLogin, function( req, res, next){
       if (err) {
         return next(err)
       } else {
-        req.session.event = eventus;
+        req.session.user.event = eventus;
         console.log("The user : " +  req.session.user.username  + " create one event. ID : " + eventus.name + "Event name : " + eventus.name + "\n");
-        return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/eventUpdate.ejs', { eventusOne: req.session.event });
+        return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/eventUpdate.ejs', { userProfile: req.session.user });
       }
     });
   } else {
     var err = new Error('All fields required.');
-    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/createEvent.ejs');
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/createEvent.ejs', { userProfile: req.session.user });
   }
 })
 
 router.get('/getEvent', requiresLogin, function( req, res, next){
-  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/getOneEvent.ejs')
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/getOneEvent.ejs', { userProfile: req.session.user })
 })
 
 router.post('/getOneEvent', requiresLogin, function( req, res, next){
-  console.log(req.session.user.username + " : ask for event = " + req.body._id + "\n");
+  console.log(req.session.user.username + " : ask for event = " + req.body.name + "\n");
 
   var eventusV = {
-    _id: req.body._id,
+    name: req.body.name,
   }
 
   Eventus.findOne(eventusV, function(err, eventusV){
     if (err) return handleError(err);
-    req.session.event = eventusV;
+    req.session.user.event = eventus;
     console.log("We have found one event : " + eventusV.name + " for the user : " + req.session.user.username + "\n")
-  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { eventusOne: req.session.event });
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', {  userProfile: req.session.user  });
   })
 
 })
@@ -336,9 +318,10 @@ router.get('/getAllEvents', requiresLogin, function( req, res, next){
 
   Eventus.find(owner, function(err, eventus){
     if (err) return handleError(err);
-    console.log("Research all events by ower. The owner is : " + req.session.user.username + "\n");
-    req.session.event = eventus;
-    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayMyEvents.ejs', {eventusList: req.session.event});
+    console.log("Research all events by ower. The owner is : " + eventus + "\n");
+    req.session.user.eventList = eventus;
+    console.log("Research all events by ower. The owner is : " + req.session.user.eventList + "\n");
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayMyEvents.ejs', { userProfile: req.session.user });
   })
 
 })
@@ -364,10 +347,10 @@ router.post('/updateEvent', requiresLogin, function( req, res, next){
   Eventus.findByIdAndUpdate(req.body._id, { $set: eventDataUpdate }, function(err, eventusV) {
 
       if (err) return handleError(err);
-      req.session.event = eventDataUpdate;
-      req.session.event._id = req.body._id;
+      req.session.user.event = eventusV;
+      req.session.user.event._id = req.body._id;
       console.log("Event updated : " +   eventDataUpdate.name + " by " + req.session.user.username + "\n" );
-      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { eventusOne: req.session.event });
+      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { userProfile: req.session.user });
 
       });
     }
@@ -379,9 +362,9 @@ router.get('/getEventList', requiresLogin, function(req, res, next){
   Eventus.find(function(err, eventListRequest){
     if (err) return handleError(err);
     console.log(" We found :" + eventListRequest + "\n");
-    req.session.eventRequest = eventListRequest;
+    req.session.user.eventList = eventListRequest;
 
-    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayEventList.ejs', { eventList: req.session.eventRequest });
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayEventList.ejs', { userProfile: req.session.user });
   })
 
 })
@@ -395,9 +378,6 @@ router.get('/getUser', requiresLogin, function(req, res, next){
 
 router.post('/getUser', requiresLogin, function(req, res, next){
   var userRequest;
-
-
-
 
   if( req.body.username) {
     req.body.username = req.body.username.replace('/','');

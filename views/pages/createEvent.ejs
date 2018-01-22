@@ -1,7 +1,9 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <% include ../partials/head %>
+    <link href="/style/event.css" rel="stylesheet">
 </head>
 <body class="container">
 
@@ -10,29 +12,31 @@
 
   </header>
 
-<main>
-  <form action="/createEvent" method="post">
-            <p>
-                <label for="name">Event name: </label>
-                <input type="text" name="name" id="name" autofocus />
-                <label for="name">Description: </label>
-                <input type="text" name="description" id="description" autofocus />
-                <label for="date">Date: </label>
-                <input type="date" name="date" id="date" >
-                <label for="building_number">Building number: </label>
-                <input type="number" name="building_number" id="building_number" autofocus />
-                <label for="street_name">Street name: </label>
-                <input type="text" name="street_name" id="street_name" autofocus />
-                <label for="city">City: </label>
-                <input type="text" name="city" id="city" autofocus />
-                <label for="post_code">Post code: </label>
-                <input type="number" name="post_code" id="post_code" autofocus />
-                <label for="country_code">Country: </label>
+
+  <form class="form-event" action="/createEvent" method="post">
+            <h2 class="form-event-heading">Create your event</h2>
+            <div class="form-group">
+                <label for="name"  >Event name: </label>
+                <input type="text" name="name" id="name" class="form-control" placeholder="Ex: Birthday Olivia" required autofocus />
+                <label for="name"  >Description: </label>
+                <input type="text" name="description" id="description" class="form-control" placeholder="Ex: Everyone is invited for Olivia Bithday in our flat." required autofocus />
+                <label for="date">Date and time</label>
+                <input class="form-control" type="datetime-local" name="date" value="2011-08-19T13:45:00" id="date">
+                <label for="building_number"  >Building number: </label>
+                <input type="number" name="building_number" id="building_number" class="form-control" placeholder="Ex: 74"  required autofocus />
+                <label for="street_name"  >Street name: </label>
+                <input type="text" name="street_name" id="street_name" class="form-control" placeholder="Ex: Avenue des Champs-Elysées" required autofocus />
+                <label for="city"  >City: </label>
+                <input type="text" name="city" id="city" class="form-control" placeholder="Ex: Paris" required autofocus />
+                <label for="post_code"  >Post code: </label>
+                <input type="number" name="post_code" id="post_code" class="form-control" placeholder="Ex: 75008" required autofocus />
+                <label for="country_code"  >Country: </label>
                 <% include ../partials/country %>
-                <input type="submit" />
-            </p>
+              </br>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
+              </div>
   </form>
-</main>
+
 
 <footer>
     <% include ../partials/footer %>

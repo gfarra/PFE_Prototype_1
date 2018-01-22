@@ -3,56 +3,54 @@
 <html lang="en">
 <head>
     <% include ../partials/head %>
-        <link href="/style/navbar.css" rel="stylesheet">
+    <link href="/style/event.css" rel="stylesheet">
 </head>
 <body class="container">
 
 <header>
 <% include ../partials/header %>
-
 </header>
-<main>
 
-  <div class="Profile_picture">
-    <img src="data:image/jpg;base64,<%= userProfile.profile_picture %>" >
-    <img src="data:{{image.contentType}};base64,{{<%= userProfile.profile_picture %>}}">
+  <div class="User_Profile">
+    <div class="row">
+      <section class="col-sm-3">
+        <img src="data:image/jpg;base64,<%= userProfile.profile_picture %>" class="img-thumbnail">
+        <form  id="uploadForm" enctype="multipart/form-data" action="/profile/picture" method="post">
+                <label class="btn btn-default btn-file ">
+                   Browse <input type="file" name="userPhoto" style="display: none;" required />
+                </label>
+                <input type="submit" class="btn btn-primary" value="Upload Image" name="submit">
+        </form>
+        </br>
+        <div class="Profile_Inforation">
+          <ul class="list-group">
+            <li class="list-group-item">Email: <%= userProfile.email %></li>
+            <li class="list-group-item">Username: <%= userProfile.username %></li>
+            <li class="list-group-item">Full name: <%= userProfile.profile.first_name %> <%= userProfile.profile.last_name %></li>
+            <li class="list-group-item">Description: <%= userProfile.profile.description %></li>
+            <li class="list-group-item">Born in: <%= userProfile.profile.birthday %></li>
+            <a href="/profile/update/profile"> <button class="btn btn-block btn-primary">Edit</button> </a>
+          </ul>
+        </div>
+      </section>
+      <div class="col-sm-6">
 
-    <form id="uploadForm" enctype="multipart/form-data" action="/profile/picture" method="post">
-      <input type="file" name="userPhoto" />
-      <input type="submit" value="Upload Image" name="submit">
-    </form>
-
+      </div>
+      <div class="col-sm-3">
+        <div class="Profile_About">
+            <ul class="list-group">
+              <li class="list-group-item">Next destination: <%= userProfile.about.next_destination %></li>
+              <li class="list-group-item">Previous destination: <%= userProfile.about.last_destination %></li>
+              <li class="list-group-item">From: <%= userProfile.about.from %></li>
+              <li class="list-group-item">Job: <%= userProfile.about.job %>, Company : <%= userProfile.about.company %></li>
+              <li class="list-group-item">Living actualy in: <%= userProfile.about.living_place %></li>
+              <a href="/profile/update/profile"> <button class="btn btn-block btn-primary">Edit</button> </a>
+            </ul>
+        </div>
+      <a href="/getAllEvents"><button class="btn btn-block btn-primary">My events</button></a>
+      </div>
+    </div>
   </div>
-
-<img src="data:image/jpg;base64,<s:property value='<%= userProfile.profile_picture %>'/>"
-
-  <div class="Profile">
-      <ul>
-        <li>Email : <%= userProfile.email %></li>
-        <li>Username : <%= userProfile.username %></li>
-        <li>Last name :  <%= userProfile.profile.last_name %></li>
-        <li>First name : <%= userProfile.profile.first_name %></li>
-        <li>Description :<%= userProfile.profile.description %></li>
-        <li>Born in : <%= userProfile.profile.birthday %></li>
-        <li><a href="/profile/update/profile">Edit</a></li>
-      </ul>
-  </div>
-
-  <div class="About">
-      <ul>
-        <li>Next destination : <%= userProfile.about.next_destination %></li>
-        <li>Previous destination : <%= userProfile.about.last_destination %></li>
-        <li>Last friends added :  <%= userProfile.about.last_friends_added %></li>
-        <li>From : <%= userProfile.about.from %></li>
-        <li>Job :<%= userProfile.about.job %></li>
-        <li>Company : <%= userProfile.about.company %></li>
-        <li>Living actualy in : <%= userProfile.about.living_place %></li>
-        <li><a href="/profile/update/about">Edit</a></li>
-      </ul>
-  </div>
-
-</main>
-
 <footer>
     <% include ../partials/footer %>
 </footer>

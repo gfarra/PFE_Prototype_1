@@ -12,9 +12,24 @@
 </header>
 
 <main>
-  <div class="EventusList">
+  <div class="main">
 
-        <%- JSON.stringify(eventusList) %>
+    <% for(var i=0; i < userProfile.eventList.length; i++) { %>
+      <form action="/getOneEvent" method="post" name="submit_id" id="<%= i %>" >
+
+      <input type="hidden" name="_id" id="_id" value=<%= userProfile.eventList[i]._id %> readonly  /><br/>
+
+      <label>Event name :</label><br/>
+      <input type="text" name="name" id="name" value="<%= userProfile.eventList[i].name %>" readonly /><br/>
+
+      <label>Description :</label><br/>
+      <input type="text" name="description" id="description" value='<%= userProfile.eventList[i].description %>' readonly /> <br/>
+
+      <button onclick="submit_by_id();"> Cliquez </button>
+
+      </form>
+    <% } %>
+
   </div>
 </main>
 

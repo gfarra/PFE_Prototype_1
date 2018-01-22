@@ -16,16 +16,16 @@
 
 <div class="main">
 
-  <% for(var i=0; i < eventList.length; i++) { %>
+  <% for(var i=0; i < userProfile.eventList.length; i++) { %>
     <form action="/getOneEvent" method="post" name="submit_id" id="<%= i %>" >
 
-    <input type="hidden" name="_id" id="_id" value=<%= eventList[i]._id %> readonly  /><br/>
+    <input type="hidden" name="_id" id="_id" value=<%= userProfile.eventList[i]._id %> readonly  /><br/>
 
     <label>Event name :</label><br/>
-    <input type="text" name="name" id="name" value="<%= eventList[i].name %>" readonly /><br/>
+    <input type="text" name="name" id="name" value="<%= userProfile.eventList[i].name %>" readonly /><br/>
 
     <label>Description :</label><br/>
-    <input type="text" name="description" id="description" value='<%= eventList[i].description %>' readonly /> <br/>
+    <input type="text" name="description" id="description" value='<%= userProfile.eventList[i].description %>' readonly /> <br/>
 
     <button onclick="submit_by_id();"> Cliquez </button>
 
