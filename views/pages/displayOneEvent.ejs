@@ -13,52 +13,22 @@
 </header>
 
 <main>
-  <div class="Eventus">
-      <ul>
-        <li>Id :<%= userProfile.event._id %></li>
-        <li>Name : <%= userProfile.event.name %></li>
-        <li>Date : <%= userProfile.event.date %></li>
-        <li>Update day: <%= userProfile.event.updated %></li>
-        <li>Description : <%= userProfile.event.description %></li>
-        <li>Adresse :<%- JSON.stringify(userProfile.event.address) %></li>
-      </ul>
+  <div class="Event_Information">
+    <ul class="list-group">
+      <li class="list-group-item">Id :<%= userProfile.event._id %></li>
+      <li class="list-group-item">Name : <%= userProfile.event.name %></li>
+      <li class="list-group-item">Date : <%= userProfile.event.date %></li>
+      <li class="list-group-item">Update day: <%= userProfile.event.updated %></li>
+      <li class="list-group-item">Description : <%= userProfile.event.description %></li>
+      <li class="list-group-item">Address: <%= userProfile.event.address.building_number %> <%= userProfile.event.address.street_name %>, <%= userProfile.event.address.post_code %> <%= userProfile.event.address.city  %>  </li>
+      <form action="/editOneEventId" method="get">
+                    <input type="hidden" name="_id" id="_id" value="<%= userProfile.event._id %>" />
+                    <button class="btn btn-block btn-primary">Edit</button>
+      </form>
+    </br>
+      <a href="/event/update/picture"> <button class="btn btn-block btn-primary">Follow this link to add a picture</button> </a>
+    </ul>
   </div>
-
-  <main>
-
-    <form action="/updateEvent" method="post">
-              <p>
-                  <label for="_id">Event ID : </label>  <br/>
-                  <input type="text" name="_id" id="_id"  value=<%= userProfile.event._id %> readonly />  <br/>
-
-                  <label for="name">Name : </label>  <br/>
-                  <input type="text" name="name" id="name"  value=<%= userProfile.event.name %> autofocus />  <br/>
-
-                  <label for="description">Description: </label>  <br/>
-                  <input type="text" name="description" id="description"  value=<%= userProfile.event.description %> autofocus />  <br/>
-
-                  <label for="date">Date: </label>  <br/>
-                  <input type="date" name="date" id="date"  value=<%= userProfile.event.date %> autofocus />  <br/>
-
-                  <label for="building_number">Building number : </label>  <br/>
-                  <input type="number" name="building_number" id="building_number"  value=<%= userProfile.event.address.building_number %> autofocus  />  <br/>
-
-                  <label for="street_name">Street: </label>  <br/>
-                  <input type="text" name="street_name" id="street_name"  value=<%= userProfile.event.address.street_name %> autofocus />  <br/>
-
-                  <label for="city">city: </label>  <br/>
-                  <input type="text" name="city" id="city"  value=<%= userProfile.event.address.city %> autofocus />  <br/>
-
-                  <label for="post_code">Post code: </label>  <br/>
-                  <input type="number" name="post_code" id="post_code"  value=<%= userProfile.event.address.post_code %> autofocus />  <br/>
-
-                  <label for="country_code">Country code: </label>  <br/>
-                  <input type="number" name="country_code" id="country_code"  value=<%= userProfile.event.address.country_code %> autofocus />  <br/>
-
-                  <input type="submit" />
-              </p>
-    </form>
-  </main>
 
 </main>
 

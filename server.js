@@ -7,7 +7,7 @@ var multer = require('multer');
 
 var app           = express();
 var port          = 8000;
-var url           = 'mongodb://localhost:27017/db_app_pic2';
+var url           = 'mongodb://localhost:27017/db_app_test';
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');

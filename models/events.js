@@ -62,10 +62,8 @@ var EventSchema = new mongoose.Schema({
       required: false,
   },
   event_picture: {
-    type: String,
-    unique: false,
-    required: false,
-    trim: true,
+    data: Buffer,
+    contentType: String,
   },
   like: {
     type: [String],

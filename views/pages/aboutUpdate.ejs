@@ -14,22 +14,21 @@
 
 <main>
 
-<form action="/profile/update/about" method="post">
-          <p>
+<form class="form-event" action="/profile/update/about" method="post">
+  <h2 class="form-event-heading">Update your informations</h2>
               <label for="next_destination">Next destination : </label>
-              <input type="text" name="next_destination" id="next_destination"  value="<%= userProfile.about.next_destination %>" autofocus />
+              <input type="text"  class="form-control" name="next_destination" id="next_destination"  value="<%= userProfile.about.next_destination %>" autofocus />
               <label for="last_destination">Last destination: </label>
-              <input type="text" name="last_destination" id="last_destination"  value="<%= userProfile.about.last_destination %>" autofocus />
+              <input type="text"  class="form-control" name="last_destination" id="last_destination"  value="<%= userProfile.about.last_destination %>" autofocus />
               <label for="from">From : </label>
-              <input type="text" name="from" id="from"  value="<%= userProfile.about.from %>" autofocus  />
+              <input type="text" class="form-control" name="from" id="from"  value="<%= userProfile.about.from %>" autofocus  />
               <label for="living_place">Actualy living on : </label>
-              <input type="text" name="living_place" id="living_place"  value="<%= userProfile.about.living_place %>" autofocus />
+              <input type="text"  class="form-control" name="living_place" id="living_place"  value="<%= userProfile.about.living_place %>" autofocus />
               <label for="job">Job : </label>
-              <input type="text" name="job" id="job"  value="<%= userProfile.about.job %>" autofocus />
+              <input type="text" class="form-control" name="job" id="job"  value="<%= userProfile.about.job %>" autofocus />
               <label for="company">Company : </label>
-              <input type="text" name="company" id="company"  value="<%= userProfile.about.company %>" autofocus />
-              <input type="submit" />
-          </p>
+              <input type="text" class="form-control" name="company" id="company"  value="<%= userProfile.about.company %>" autofocus />
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
 </form>
 
 </main>

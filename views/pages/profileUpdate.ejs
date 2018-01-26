@@ -4,6 +4,7 @@
 <head>
     <% include ../partials/head %>
     <link href="/style/event.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 </head>
 <body class="container">
 
@@ -14,20 +15,19 @@
 
 <main>
 
-<form action="/profile/update/profile" method="post">
-          <p>
+<form class="form-event" action="/profile/update/profile" method="post">
+          <h2 class="form-event-heading">Update your profile</h2>
               <label for="first_name">First name: </label>
-              <input type="text" name="first_name" id="first_name"  value="<%= userProfile.profile.first_name %>" autofocus />
+              <input type="text" class="form-control" name="first_name" id="first_name"  value="<%= userProfile.profile.first_name %>" autofocus />
               <label for="last_name">Last name: </label>
-              <input type="text" name="last_name" id="last_name"  value="<%= userProfile.profile.last_name %>" autofocus />
+              <input type="text" class="form-control" name="last_name" id="last_name"  value="<%= userProfile.profile.last_name %>" autofocus />
               <label for="birthday">Born date: </label>
-              <input type="date" name="birthday" id="birthday"  value="<%= userProfile.profile.birthday %>" autofocus />
+              <input type="datetime-local" class="form-control" name="birthday" id="birthday"  value="<%= userProfile.profile.birthday %>" autofocus />
               <label for="email">Email : </label>
-              <input type="email" name="email" id="email"  value="<%= userProfile.email %>" autofocus />
+              <input type="email" class="form-control" name="email" id="email"  value="<%= userProfile.email %>" autofocus />
               <label for="description">Description: </label>
-              <input type="text" name="description" id="description"  value="<%= userProfile.profile.description %>" autofocus />
-              <input type="submit" />
-          </p>
+              <input type="text" class="form-control" name="description" id="description"  value="<%= userProfile.profile.description %>" autofocus />
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
 </form>
 
 </main>

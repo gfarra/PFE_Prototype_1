@@ -26,6 +26,10 @@ function requiresLogin(req, res, next) {
   }
 }
 
+function hexToBase64(str) {
+    return String.fromCharCode.apply(null, str.toString().replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" "));
+}
+
 // ################## INDEX #############################
 
 // Homa page for test : Connection and creation of the account OK
@@ -129,7 +133,25 @@ router.get('/logout', requiresLogin, function (req, res, next) {
 
 // ############## Own user profile Management ##########
 router.get('/profile', requiresLogin, function( req, res, next){
+  var cutoff = new Date();
+  cutoff.setDate(cutoff.getDate());
+  console.log("##### : " + cutoff + "\n");
+  var eventData = {
+      date: {
+        $lt: cutoff,
+      },
+      participants: req.session.userId,
+  };
+
+  Eventus.find(eventData, function (err, eventus) {
+    if (err) return handleError(err);
+    req.session.user.pastEvent = eventus;
+    console.log("##### : " + req.session.user.pastEvent + "\n");
     return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs',  { userProfile: req.session.user} );
+  })
+
+
+
 })
 
 router.get('/profile/update/profile', requiresLogin, function( req, res, next){
@@ -290,6 +312,7 @@ router.get('/getEvent', requiresLogin, function( req, res, next){
   return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/getOneEvent.ejs', { userProfile: req.session.user })
 })
 
+
 router.post('/getOneEvent', requiresLogin, function( req, res, next){
   console.log(req.session.user.username + " : ask for event = " + req.body.name + "\n");
 
@@ -299,9 +322,25 @@ router.post('/getOneEvent', requiresLogin, function( req, res, next){
 
   Eventus.findOne(eventusV, function(err, eventusV){
     if (err) return handleError(err);
-    req.session.user.event = eventus;
+    req.session.user.event = eventusV;
     console.log("We have found one event : " + eventusV.name + " for the user : " + req.session.user.username + "\n")
   return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', {  userProfile: req.session.user  });
+  })
+
+})
+
+router.get('/editOneEventId', requiresLogin, function( req, res, next){
+  console.log(req.session.user.username + " : ask for event = " + req.body.name + "\n");
+
+  var eventusV = {
+    _id: req.query._id,
+  }
+
+  Eventus.findOne(eventusV, function(err, eventusV){
+    if (err) return handleError(err);
+    req.session.user.event = eventusV;
+    console.log("We have found one event : " + eventusV.name + " for the user : " + req.session.user.username + "\n")
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/eventUpdate.ejs', {  userProfile: req.session.user  });
   })
 
 })
@@ -352,6 +391,37 @@ router.post('/updateEvent', requiresLogin, function( req, res, next){
     }
 })
 
+router.get('/event/update/picture', requiresLogin, function( req, res, next){
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/updateEventPicture.ejs', { userProfile: req.session.user })
+})
+
+router.post('/event/update/picture', requiresLogin, function( req, res, next){
+
+  upload(req,res,function(err) {
+      if(err) {
+          return res.end("Error uploading file.");
+      }
+
+      eventDataUpdate = {
+        event_picture: fs.readFileSync(req.file.path),
+        contentType: 'image/jpg',
+      };
+
+      Eventus.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
+        if (err) return handleError(err);
+
+        req.session.save( function(eir) {
+          req.session.reload( function (err) {
+            req.session.user = userDataUpdate;
+            console.log("User updated : :" + req.session.userId + "\n");
+          });
+        });
+      });
+
+      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
+
+})
+
 
 router.get('/getEventList', requiresLogin, function(req, res, next){
 
@@ -374,37 +444,26 @@ router.get('/getUser', requiresLogin, function(req, res, next){
 
 router.get('/getUsername', requiresLogin, function(req, res, next){
   var userRequest;
-  var url = require('url');
-  var url_parts = url.parse(request.url, true);
-  var query = url_parts.query;
-  
-  if( req.body.username) {
-    req.body.username = req.body.username.replace('/','');
 
-    console.log(req.session.user.username + " : request this user profile by username => " + req.body.username + "\n");
+  if( req.query.username) {
+    req.query.username = req.query.username.replace('/','');
+
+    console.log(req.session.user.username + " : request this user profile by username => " + req.query.username + "\n");
     userRequest = {
-      username: req.body.username,
+      username: req.query.username,
     }
 
     User.findOne(userRequest, function(err, userRequest){
       if (err) return handleError(err);
       console.log(" We found :" + userRequest + "\n");
       req.session.user.userRequest = userRequest;
+      console.log(req.session.user.userRequest.profile_picture);
+      req.session.user.userRequest.profile_picture = hexToBase64(userRequest.profile_picture);
+      console.log(req.session.user.userRequest.profile_picture);
       return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserProfile.ejs', { userProfile: req.session.user });
     })
-  } else if(req.body._id) {
-    console.log(req.session.user.username + " : request this user profile by _id => " + req.body._id + "\n");
-
-    userRequest = {
-      _id: req.body._id,
-    }
-
-    User.findOne(userRequest, function(err, userRequest){
-      if (err) return handleError(err);
-      console.log(" We found :" + userRequest + "\n");
-      req.session.user.userRequest = userRequest;
-      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserProfile.ejs', { userProfile: req.session.user });
-    })
+  } else {
+    console.log(" BUG" + "\n");
   }
 })
 

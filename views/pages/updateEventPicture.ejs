@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+    <link href="/style/event.css" rel="stylesheet">
+</head>
+<body class="container">
+
+<header>
+<% include ../partials/header %>
+</header>
+
+  <div class="User_Profile">
+    <div class="row">
+        <form  id="uploadForm" enctype="multipart/form-data" action="/event/update/picture" method="post">
+                <label class="btn btn-default btn-file ">
+                   Browse <input type="file" name="userPhoto" style="display: none;" required />
+                </label>
+                <input type="submit" class="btn btn-primary" value="Upload Image" name="submit">
+        </form>
+
+</body>
