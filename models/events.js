@@ -62,8 +62,8 @@ var EventSchema = new mongoose.Schema({
       required: false,
   },
   event_picture: {
-    data: Buffer,
-    contentType: String,
+      type: [String],
+      required: false,
   },
   like: {
     type: [String],
@@ -75,4 +75,5 @@ var EventSchema = new mongoose.Schema({
 
 // Event is already take, I choose -> latin word : "eventus"...
 var eventus = mongoose.model('Event', EventSchema);
+
 module.exports = eventus;

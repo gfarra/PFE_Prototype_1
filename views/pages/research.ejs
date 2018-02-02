@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+    <link href="/style/event.css" rel="stylesheet">
+</head>
+<body class="container">
+
+<header>
+<% include ../partials/header %>
+
+</header>
+
+      <div class="col-sm-6">
+        <h1 class="form-event-heading">Events</h1>
+        <% if (typeof(userProfile.eventRequest) !== 'undefined') { %>
+          <% for(var i=0; i < userProfile.eventRequest.length; i++) { %>
+            <div class="Event_Display">
+              <div class="row">
+                <div class="row">
+                  <form action="/getOneEvent" method="post" name="submit_id" id="<%= i %>" >
+                    <div class="col-sm-2">
+                    <input type="hidden" name="_id" id="_id" value="<%= userProfile.eventRequest[i]._id %>" readonly  />
+                      <img src="data:image/jpg;base64,<%= userProfile.profile_picture %>" class="img-thumbnail">
+                    </div>
+                    <div class="col-sm-6">
+                      <input type="hidden" name="name" id="name" value="<%= userProfile.eventRequest[i].name %>" readonly />
+                      <h2 class="form-event-heading"><%= userProfile.eventRequest[i].name %></h2>
+                    </div>
+                    <div class="col-sm-4">
+                      <ul class="list-group">
+                        <li class="list-group-item"><%= userProfile.eventRequest[i].date %></li>
+                      </ul>
+                    </div>
+                </div>
+                  <div class="row">
+                    <div class="col-sm-12 ">
+                      <li class="list-group-item">Address: <%= userProfile.eventRequest[i].address.building_number %> <%= userProfile.eventRequest[i].address.street_name %>, <%= userProfile.eventRequest[i].address.post_code %> <%= userProfile.eventRequest[i].address.city  %>  </li>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-12 ">
+                        <li class="list-group-item" type="description"><%= userProfile.eventRequest[i].description %></li>
+                    </div>
+                    <div class="col-sm-offset-9 col-sm-3">
+                      <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="submit_by_id();">Display</button>
+                    </div>
+                  </div>
+                </form> </br>
+              </div>
+              </div>
+            <% } %>
+          <% } else { } %>
+
+      </div>
+      <div class="col-sm-6">
+        <h1 class="form-event-heading">Users</h1>
+        <% if (typeof(userProfile.userRequest) !== 'undefined') { %>
+          <% for(var i=0; i < userProfile.userRequest.length; i++) { %>
+            <div class="Event_Display">
+              <div class="row">
+                <div class="row">
+                  <form action="/getOneEvent" method="post" name="submit_id" id="<%= i %>" >
+                    <div class="col-sm-2">
+                    <input type="hidden" name="_id" id="_id" value="<%= userProfile.userRequest[i]._id %>" readonly  />
+                      <img src="data:image/jpg;base64,<%= userProfile.profile_picture %>" class="img-thumbnail">
+                    </div>
+                    <div class="col-sm-6">
+                      <input type="hidden" name="name" id="name" value="<%= userProfile.userRequest[i].name %>" readonly />
+                      <h2 class="form-event-heading"><%= userProfile.userRequest[i].username %></h2>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-offset-9 col-sm-3">
+                      <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="submit_by_id();">Display</button>
+                    </div>
+                  </div>
+                </form> </br>
+              </div>
+              </div>
+            <% } %>
+          <% } else { } %>
+
+      </div>
+
+<footer>
+    <% include ../partials/footer %>
+</footer>
+
+</body>
+</html>

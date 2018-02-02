@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/users');
+var Eventus = require ('../models/events');
 var fs = require('file-system');
 var multer = require('multer');
 
@@ -12,9 +13,10 @@ var storage =   multer.diskStorage({
     callback(null, file.fieldname + '-' + Date.now());
   }
 });
+
 var upload = multer({ storage : storage}).single('userPhoto');
 
-var Eventus = require ('../models/events');
+
 
 function requiresLogin(req, res, next) {
   if (req.session && req.session.userId) {
@@ -24,10 +26,6 @@ function requiresLogin(req, res, next) {
     err.status = 401;
     return next(err);
   }
-}
-
-function hexToBase64(str) {
-    return String.fromCharCode.apply(null, str.toString().replace(/\r|\n/g, "").replace(/([\da-fA-F]{2}) ?/g, "0x$1 ").replace(/ +$/, "").split(" "));
 }
 
 // ################## INDEX #############################
@@ -102,7 +100,6 @@ router.post('/', function(req, res, next){
           } else {
             req.session.userId = user._id;
             req.session.user = user;
-            console.log("User connected :" + user.email + "\n");
             return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
           }
         })
@@ -131,11 +128,11 @@ router.get('/logout', requiresLogin, function (req, res, next) {
 });
 // #####################################################
 
+
 // ############## Own user profile Management ##########
 router.get('/profile', requiresLogin, function( req, res, next){
   var cutoff = new Date();
   cutoff.setDate(cutoff.getDate());
-  console.log("##### : " + cutoff + "\n");
   var eventData = {
       date: {
         $lt: cutoff,
@@ -143,13 +140,25 @@ router.get('/profile', requiresLogin, function( req, res, next){
       participants: req.session.userId,
   };
 
-  Eventus.find(eventData, function (err, eventus) {
-    if (err) return handleError(err);
-    req.session.user.pastEvent = eventus;
-    console.log("##### : " + req.session.user.pastEvent + "\n");
-    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs',  { userProfile: req.session.user} );
-  })
+  var userIdRequest = {
+    _id:  req.session.userId,
+  }
 
+    User.findOne(userIdRequest, function(err, user){
+      if (err) return handleError(err);
+
+      var objJsonStr = JSON.stringify(user.profile_picture);
+      var objJsonB64 = new Buffer(objJsonStr).toString("base64");
+      console.log("Picture ## \n " + objJsonB64  + "\n \n ##");
+      req.session.user = user;
+      console.log("Picture ## \n " + req.session.user.profile_picture  + "\n \n ##");
+
+      Eventus.find(eventData, function (err, eventus) {
+        if (err) return handleError(err);
+        req.session.user.pastEvent = eventus;
+        return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs',  { userProfile: req.session.user });
+      })
+  });
 
 
 })
@@ -182,13 +191,12 @@ router.post('/profile/update/profile', requiresLogin, function(req, res, next){
 
         req.session.save( function(eir) {
           req.session.reload( function (err) {
-            req.session.user = userDataUpdate;
-            console.log("User updated first name :" + userDataUpdate.profile + "\n");
+            req.session.user = user;
           });
         });
+  res.redirect('/Profile');
       });
 
-      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
 
 })
 
@@ -200,8 +208,7 @@ router.get('/profile/update/about', requiresLogin, function( req, res, next){
 // I receive the information correctly, I ppdate correctly
 router.post('/profile/update/about', requiresLogin, function(req, res, next){
 
-      var userDataUpdate = req.session.user;
-      console.log(req.session.user);
+
       userDataUpdate = {
         about: {
           last_destination: req.body.last_destination,
@@ -213,7 +220,6 @@ router.post('/profile/update/about', requiresLogin, function(req, res, next){
         }
       };
 
-      console.log("Receive new informations :" + userDataUpdate + "for user : " + req.session.user.username +  "\n");
 
       // Creation of the account in the DataBase
       User.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
@@ -221,14 +227,12 @@ router.post('/profile/update/about', requiresLogin, function(req, res, next){
 
         req.session.save( function(eir) {
           req.session.reload( function (err) {
-            req.session.user = userDataUpdate;
-            console.log("User updated : :" + req.session.user.username + "\n");
+            req.session.user = user;
+
           });
         });
+        res.redirect('/Profile');
       });
-
-      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
-
 })
 
 // Get profile picture
@@ -253,13 +257,12 @@ router.post('/profile/picture',  requiresLogin, function(req, res, next){
 
         req.session.save( function(eir) {
           req.session.reload( function (err) {
-            req.session.user = userDataUpdate;
-            console.log("User updated : :" + req.session.userId + "\n");
+            req.session.user = user;
           });
         });
       });
 
-      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
+      res.redirect('/Profile');
 
   });
 });
@@ -313,19 +316,32 @@ router.get('/getEvent', requiresLogin, function( req, res, next){
 })
 
 
-router.post('/getOneEvent', requiresLogin, function( req, res, next){
-  console.log(req.session.user.username + " : ask for event = " + req.body.name + "\n");
+router.get('/getOneEvent', requiresLogin, function( req, res, next){
 
-  var eventusV = {
-    name: req.body.name,
-  }
+  var researchev = {
+    name: req.query.name,
+  };
 
-  Eventus.findOne(eventusV, function(err, eventusV){
+  var researchus = {
+    username: req.query.name,
+  };
+
+  Eventus.find(researchev, function(err, eventusV){
     if (err) return handleError(err);
-    req.session.user.event = eventusV;
-    console.log("We have found one event : " + eventusV.name + " for the user : " + req.session.user.username + "\n")
-  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', {  userProfile: req.session.user  });
-  })
+    req.session.user.eventRequest = eventusV;
+
+    console.log(req.session.user.eventRequest + "\n");
+
+    User.find(researchus, function(err, user){
+      if (err) return handleError(err);
+      req.session.user.userRequest = user;
+
+      console.log(req.session.user.userRequest + "\n");
+      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/research.ejs', {  userProfile: req.session.user  });
+    })
+
+
+  });
 
 })
 
@@ -334,7 +350,7 @@ router.get('/editOneEventId', requiresLogin, function( req, res, next){
 
   var eventusV = {
     _id: req.query._id,
-  }
+  };
 
   Eventus.findOne(eventusV, function(err, eventusV){
     if (err) return handleError(err);
@@ -349,7 +365,7 @@ router.get('/getAllEvents', requiresLogin, function( req, res, next){
 
   var owner = {
     ownerUser: req.session.userId,
-  }
+  };
 
   Eventus.find(owner, function(err, eventus){
     if (err) return handleError(err);
@@ -357,7 +373,7 @@ router.get('/getAllEvents', requiresLogin, function( req, res, next){
     req.session.user.eventList = eventus;
     console.log("Research all events by ower. The owner is : " + req.session.user.eventList + "\n");
     return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayMyEvents.ejs', { userProfile: req.session.user });
-  })
+  });
 
 })
 
@@ -392,7 +408,7 @@ router.post('/updateEvent', requiresLogin, function( req, res, next){
 })
 
 router.get('/event/update/picture', requiresLogin, function( req, res, next){
-  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/updateEventPicture.ejs', { userProfile: req.session.user })
+  return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/updateEventPicture.ejs', { userProfile: req.session.user });
 })
 
 router.post('/event/update/picture', requiresLogin, function( req, res, next){
@@ -400,7 +416,7 @@ router.post('/event/update/picture', requiresLogin, function( req, res, next){
   upload(req,res,function(err) {
       if(err) {
           return res.end("Error uploading file.");
-      }
+      };
 
       eventDataUpdate = {
         event_picture: fs.readFileSync(req.file.path),
@@ -421,6 +437,7 @@ router.post('/event/update/picture', requiresLogin, function( req, res, next){
       return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user});
 
 })
+})
 
 
 router.get('/getEventList', requiresLogin, function(req, res, next){
@@ -431,7 +448,7 @@ router.get('/getEventList', requiresLogin, function(req, res, next){
     req.session.user.eventList = eventListRequest;
 
     return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayEventList.ejs', { userProfile: req.session.user });
-  })
+  });
 
 })
 // #####################################################
@@ -477,9 +494,6 @@ router.get('/getUserList', requiresLogin, function(req, res, next){
 
     return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayUserList.ejs', { userProfile: req.session.user });
   })
-
-
 })
-
 
 module.exports = router;
