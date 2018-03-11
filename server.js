@@ -5,9 +5,9 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var multer = require('multer');
 
-var app           = express();
-var port          = 8000;
-var url           = 'mongodb://localhost:27017/db_app_test';
+var app = express();
+var port = 8000;
+var url = 'mongodb://localhost:27017/db_app_v0';
 
 // set the view engine to ejs
 app.set('view engine', 'ejs');
@@ -18,21 +18,21 @@ var db = mongoose.connection;
 
 //handle mongo error
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-  // we're connected!
-  console.log("We're connected!");
+db.once('open', function() {
+    // we're connected!
+    console.log("We're connected!");
 });
 
 app.use(express.static(__dirname + '/public'));
 
 //use sessions for tracking logins
 app.use(session({
-  secret: 'work hard',
-  resave: true,
-  saveUninitialized: false,
-  store: new MongoStore({
-    mongooseConnection: db
-  })
+    secret: 'work hard',
+    resave: true,
+    saveUninitialized: false,
+    store: new MongoStore({
+        mongooseConnection: db
+    })
 }));
 
 // parse incoming requests
@@ -43,21 +43,21 @@ app.use(bodyParser.urlencoded({ extended: true }));
 var routes = require('./routes/router');
 app.use('/', routes);
 
-app.use(function (req, res, next) {
-  var err = new Error('File Not Found');
-  err.status = 404;
-  next(err);
+app.use(function(req, res, next) {
+    var err = new Error('File Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handler
 // define as the last app.use callback
-app.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  res.send(err.message);
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    res.send(err.message);
 });
 
 
 // listen on port
-app.listen(port, function () {
-  console.log('Express app listening on port ' + port);
+app.listen(port, function() {
+    console.log('Express app listening on port ' + port);
 });

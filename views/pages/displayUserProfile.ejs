@@ -15,7 +15,7 @@
 <div class="User_Profile">
   <div class="row">
     <section class="col-sm-3">
-      <img src="data:image/jpg;base64,<%=  userProfile.userRequest.profile_picture %>" class="img-thumbnail">
+    <img src="data:image/jpg;base64, <%= userProfile.profile_picture %>" class="img-thumbnail">
       </form>
       </br>
       <div class="Profile_Inforation">
@@ -29,8 +29,43 @@
       </div>
     </section>
     <div class="col-sm-6">
+    <% if (typeof(userProfile.pastEvent) !== 'undefined') { %>
+      <% for(var i=0; i < userProfile.pastEvent.length; i++) { %>
+        <div class="Event_Display">
+          <div class="row">
+            <div class="row">
+              <form action="/getOneEvent" method="post" name="submit_id" id="<%= i %>" >
+                <div class="col-sm-2">
+                <input type="hidden" name="_id" id="_id" value="<%= userProfile.pastEvent[i]._id %>" readonly  />
+                  <img src="data:image/jpg;base64, <%= userProfile.profile_picture %>" class="img-thumbnail">
+                </div>
+                <div class="col-sm-6">
+                  <input type="hidden" name="name" id="name" value="<%= userProfile.pastEvent[i].name %>" readonly />
+                  <h2 class="form-event-heading" > <%= userProfile.pastEvent[i].name %> </h2>
+                </div>
+                <div class="col-sm-4">
+                  <ul class="list-group">
+                    <li class="list-group-item"><%= userProfile.pastEvent[i].date %></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 ">
+                  <li class="list-group-item">Address: <%= userProfile.pastEvent[i].address.building_number %> <%= userProfile.pastEvent[i].address.street_name %>, <%= userProfile.pastEvent[i].address.post_code %> <%= userProfile.pastEvent[i].address.city  %>  </li>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-12 ">
+                    <li class="list-group-item" type="description"><%= userProfile.pastEvent[i].description %></li>
+                </div>
+              </div>
+            </form> </br>
+          </div>
+          </div>
+        <% } %>
+      <% } else { } %>
 
-    </div>
+  </div>
     <div class="col-sm-3">
       <div class="Profile_About">
           <ul class="list-group">
