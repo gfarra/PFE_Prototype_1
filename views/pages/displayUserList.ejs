@@ -17,18 +17,40 @@
 <div class="main">
 
   <% for(var i=0; i < userProfile.userList.length; i++) { %>
-    <form action="/getUser" method="post" name="submit_username" id="<%= i %>" >
-
-
-    <label>User name :</label><br/>
-    <input type="text" name="username" id="username"  value=<%= userProfile.userList[i].username %> readonly /><br/>
-
-    <label>Email :</label><br/>
-    <input type="text" name="email" id="email"  value=<%= userProfile.userList[i].email %> readonly /> <br/>
-
-    <button onclick="submit_by_id();"> Cliquez </button>
-
-    </form>
+  <div class="Event_Display">
+  <div class="row">
+    <div class="row">
+      <form action="/getOneEvent" method="post" name="submit_id" id="<%= i %>" >
+        <div class="col-sm-2">
+        <input type="hidden" name="_id" id="_id" value="<%= userProfile.pastEvent[i]._id %>" readonly  />
+          <img src="data:image/jpg;base64, <%= userProfile.profile_picture %>" class="img-thumbnail">
+        </div>
+        <div class="col-sm-6">
+          <input type="hidden" name="name" id="name" value="<%= userProfile.pastEvent[i].name %>" readonly />
+          <h2 class="form-event-heading" > <%= userProfile.pastEvent[i].name %> </h2>
+        </div>
+        <div class="col-sm-4">
+          <ul class="list-group">
+            <li class="list-group-item"><%= userProfile.pastEvent[i].date %></li>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 ">
+          <li class="list-group-item">Address: <%= userProfile.pastEvent[i].address.building_number %> <%= userProfile.pastEvent[i].address.street_name %>, <%= userProfile.pastEvent[i].address.post_code %> <%= userProfile.pastEvent[i].address.city  %>  </li>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 ">
+            <li class="list-group-item" type="description"><%= userProfile.pastEvent[i].description %></li>
+        </div>
+      </div>
+      <div class="col-sm-offset-9 col-sm-3">
+        <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="submit_by_id();">Display</button>
+      </div>
+    </form> </br>
+  </div>
+  </div>
   <% } %>
 
 </div>

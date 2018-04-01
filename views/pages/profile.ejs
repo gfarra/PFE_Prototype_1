@@ -43,8 +43,8 @@
                   <form action="/getOneEvent" method="post" name="submit_id" id="<%= i %>" >
                     <div class="col-sm-2">
                     <input type="hidden" name="_id" id="_id" value="<%= userProfile.pastEvent[i]._id %>" readonly  />
-                    <img src="data:image/jpg;base64, <%= userProfile.profile_picture %>" class="img-thumbnail">
-                  </div>
+                      <img src="data:image/jpg;base64, <%= userProfile.profile_picture %>" class="img-thumbnail">
+                    </div>
                     <div class="col-sm-6">
                       <input type="hidden" name="name" id="name" value="<%= userProfile.pastEvent[i].name %>" readonly />
                       <h2 class="form-event-heading" > <%= userProfile.pastEvent[i].name %> </h2>
