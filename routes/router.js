@@ -371,7 +371,7 @@ router.post('/Event/picture', requiresLogin, function(req, res, next) {
 
 
 
-router.get('/getOneEvent', requiresLogin, function(req, res, next) {
+router.get('/research', requiresLogin, function(req, res, next) {
 
     var researchev = {
         name: req.query.name,
@@ -397,6 +397,33 @@ router.get('/getOneEvent', requiresLogin, function(req, res, next) {
 
 
     });
+
+})
+const util = require('util')
+router.get('/GetOneEvent', requiresLogin, function(req, res, next) {
+
+    var eventusV;
+    console.log(req.query._id + "\n");
+
+    if (req.query._id) {
+        eventusV = {
+            _id: req.query._id,
+            name: req.query.name,
+        }
+        console.log(req.query._id + "\n");
+
+        Eventus.find(eventusV, function(err, eventusV) {
+            if (err) return handleError(err);
+            req.session.user.event = eventusV;
+
+        })
+
+    } else {
+        console.log(" BUG" + "\n");
+    }
+    console.log(util.inspect(req.session, { showHidden: false, depth: null }))
+    console.log(req.session + "\n");
+    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { userProfile: req.session.user });
 
 })
 

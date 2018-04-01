@@ -40,7 +40,7 @@
             <div class="Event_Display">
               <div class="row">
                 <div class="row">
-                  <form action="/getOneEvent" method="post" name="submit_id" id="<%= i %>" >
+                  <form action="/getOneEvent" method="get" name="submit_id" id="<%= i %>" >
                     <div class="col-sm-2">
                     <input type="hidden" name="_id" id="_id" value="<%= userProfile.pastEvent[i]._id %>" readonly  />
                       <img src="data:image/jpg;base64, <%= userProfile.profile_picture %>" class="img-thumbnail">

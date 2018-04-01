@@ -9,18 +9,18 @@
 
 <header>
 <% include ../partials/header %>
-
+<%= userProfile.event._id %>
 </header>
 
 <main>
   <div class="Event_Information">
     <ul class="list-group">
-      <li class="list-group-item">Id :<%= userProfile.event._id %></li>
-      <li class="list-group-item">Name : <%= userProfile.event.name %></li>
-      <li class="list-group-item">Date : <%= userProfile.event.date %></li>
-      <li class="list-group-item">Update day: <%= userProfile.event.updated %></li>
-      <li class="list-group-item">Description : <%= userProfile.event.description %></li>
-      <li class="list-group-item">Address: <%= userProfile.event.address.building_number %> <%= userProfile.event.address.street_name %>, <%= userProfile.event.address.post_code %> <%= userProfile.event.address.city  %>  </li>
+      <li class="list-group-item">Id :<%= userProfile.event[0]._id %></li>
+      <li class="list-group-item">Name : <%= userProfile.event[0].name %></li>
+      <li class="list-group-item">Date : <%= userProfile.event[0].date %></li>
+      <li class="list-group-item">Update day: <%= userProfile.event[0].updated %></li>
+      <li class="list-group-item">Description : <%= userProfile.event[0].description %></li>
+     
       <form action="/editOneEventId" method="get">
                     <input type="hidden" name="_id" id="_id" value="<%= userProfile.event._id %>" />
                     <button class="btn btn-block btn-primary">Edit</button>
