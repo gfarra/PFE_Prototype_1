@@ -16,6 +16,13 @@
   <div class="Event_Update">
     <div class="row">
       <section class="col-sm-offset-3 col-sm-6">
+          <form  id="uploadForm" enctype="multipart/form-data" action="/Event/picture" method="post">
+                  <label class="btn btn-default btn-file ">
+                     Browse <input type="file" name="EventPhoto" style="display: none;" required />
+                     <input type="hidden" class="form-control" name="_id" id="_id" readonly value=<%= userProfile.event._id %>  />
+                  </label>
+          </form>
+
           <form class="form-event" action="/updateEvent" method="post">
               <h2 class="form-event-heading">Update your event</h2>
                 <label for="_id">Event ID : </label>
@@ -26,9 +33,6 @@
 
                 <label for="description">Description: </label>
                 <input type="text" class="form-control" name="description" id="description" autofocus value=<%= userProfile.event.description %> />
-
-                <label for="date">Date: </label>
-                <input type="date" class="form-control" name="date" id="date" autofocus value=<%= userProfile.event.date %> />
 
                 <label for="building_number">Building number : </label>
                 <input type="number" class="form-control" name="building_number" id="building_number" autofocus value=<%= userProfile.event.address.building_number %>  />

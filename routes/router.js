@@ -98,9 +98,37 @@ router.post('/', function(req, res, next) {
                     err.status = 401;
                     return next(err);
                 } else {
+
+
                     req.session.userId = user._id;
                     req.session.user = user;
-                    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user });
+
+                    var cutoff = new Date();
+                    cutoff.setDate(cutoff.getDate());
+
+
+                    var userIdRequest = {
+                        _id: req.session.userId,
+                    }
+
+                    User.findOne(userIdRequest, function(err, userRequest) {
+                        if (err) return handleError(err);
+                        req.session.user.userRequest = userRequest;
+                        var eventData = {
+                            date: {
+                                $lt: cutoff,
+                            },
+                            participants: req.session.user.userRequest._id,
+                        };
+
+
+                        Eventus.find(eventData, function(err, eventus) {
+                            if (err) return handleError(err);
+                            req.session.user.pastEvent = eventus;
+                            return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user });
+                        })
+                    });
+                    //sreturn res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user });
                 }
             })
             // Other cases --> eroor
@@ -309,6 +337,38 @@ router.post('/createEvent', requiresLogin, function(req, res, next) {
 router.get('/getEvent', requiresLogin, function(req, res, next) {
     return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/getOneEvent.ejs', { userProfile: req.session.user })
 })
+
+router.post('/Event/picture', requiresLogin, function(req, res, next) {
+
+
+    var eventus = req.session.user;
+
+    upload(req, res, function(err) {
+        if (err) {
+            return res.end("Error uploading file.");
+        }
+
+        console.log("Event updated :" + req.file.path + "\n");
+        EventDataUpdate = {
+            event_picture: fs.readFileSync(req.file.path),
+            contentType: 'image/jpg',
+        };
+
+        Eventus.findByIdAndUpdate(req.session.user., { $set: userDataUpdate }, function(err, user) {
+            if (err) return handleError(err);
+
+            req.session.save(function(eir) {
+                req.session.reload(function(err) {
+                    req.session.user = user;
+                });
+            });
+        });
+
+        res.redirect('/Profile');
+
+    });
+});
+
 
 
 router.get('/getOneEvent', requiresLogin, function(req, res, next) {

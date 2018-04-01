@@ -58,8 +58,8 @@ var EventSchema = new mongoose.Schema({
         max: 5,
     },
     pictures: {
-        type: [String],
-        required: false,
+      data: Buffer,
+      contentType: String,
     },
     event_picture: {
         type: [String],
