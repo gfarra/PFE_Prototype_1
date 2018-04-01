@@ -354,7 +354,7 @@ router.post('/Event/picture', requiresLogin, function(req, res, next) {
             contentType: 'image/jpg',
         };
 
-        Eventus.findByIdAndUpdate(req.session.user., { $set: userDataUpdate }, function(err, user) {
+        Eventus.findByIdAndUpdate(req.session.user, { $set: userDataUpdate }, function(err, user) {
             if (err) return handleError(err);
 
             req.session.save(function(eir) {
@@ -521,12 +521,10 @@ router.get('/getUsername', requiresLogin, function(req, res, next) {
     cutoff.setDate(cutoff.getDate());
 
 
-    if (req.query.username) {
-        req.query.username = req.query.username.replace('/', '');
-
-        console.log(req.session.user.username + " : request this user profile by username => " + req.query.username + "\n");
+    if (req.query._id) {
+        console.log(req.session.user._id + " : request this user profile by username => " + req.query._id + "\n");
         userRequest = {
-            username: req.query.username,
+            _id: req.query._id,
         }
 
         User.findOne(userRequest, function(err, userRequest) {
