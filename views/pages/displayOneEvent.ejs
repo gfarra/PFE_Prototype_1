@@ -9,7 +9,6 @@
 
 <header>
 <% include ../partials/header %>
-<%= userProfile.event._id %>
 </header>
 
 <main>
@@ -22,7 +21,7 @@
       <li class="list-group-item">Description : <%= userProfile.event[0].description %></li>
      
       <form action="/editOneEventId" method="get">
-                    <input type="hidden" name="_id" id="_id" value="<%= userProfile.event._id %>" />
+                    <input type="hidden" name="_id" id="_id" value="<%= userProfile.event[0]._id %>" />
                     <button class="btn btn-block btn-primary">Edit</button>
       </form>
     </br>

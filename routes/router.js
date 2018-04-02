@@ -338,36 +338,7 @@ router.get('/getEvent', requiresLogin, function(req, res, next) {
     return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/getOneEvent.ejs', { userProfile: req.session.user })
 })
 
-router.post('/Event/picture', requiresLogin, function(req, res, next) {
 
-
-    var eventus = req.session.user;
-
-    upload(req, res, function(err) {
-        if (err) {
-            return res.end("Error uploading file.");
-        }
-
-        console.log("Event updated :" + req.file.path + "\n");
-        EventDataUpdate = {
-            event_picture: fs.readFileSync(req.file.path),
-            contentType: 'image/jpg',
-        };
-
-        Eventus.findByIdAndUpdate(req.session.user, { $set: userDataUpdate }, function(err, user) {
-            if (err) return handleError(err);
-
-            req.session.save(function(eir) {
-                req.session.reload(function(err) {
-                    req.session.user = user;
-                });
-            });
-        });
-
-        res.redirect('/Profile');
-
-    });
-});
 
 
 
@@ -415,15 +386,13 @@ router.get('/GetOneEvent', requiresLogin, function(req, res, next) {
         Eventus.find(eventusV, function(err, eventusV) {
             if (err) return handleError(err);
             req.session.user.event = eventusV;
-
+            return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { userProfile: req.session.user });
         })
 
     } else {
         console.log(" BUG" + "\n");
     }
-    console.log(util.inspect(req.session, { showHidden: false, depth: null }))
-    console.log(req.session + "\n");
-    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { userProfile: req.session.user });
+
 
 })
 
@@ -489,37 +458,40 @@ router.post('/updateEvent', requiresLogin, function(req, res, next) {
     }
 })
 
-router.get('/event/update/picture', requiresLogin, function(req, res, next) {
-    return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/updateEventPicture.ejs', { userProfile: req.session.user });
-})
 
-router.post('/event/update/picture', requiresLogin, function(req, res, next) {
+router.post('/Event/picture', requiresLogin, function(req, res, next) {
+
+
+    var eventus = req.session.user;
 
     upload(req, res, function(err) {
         if (err) {
-            return res.end("Error uploading file.");
-        };
+            console.log(req.body._id + "\n");
+            console.log("Event updated :" + req.file + "\n");
+            return res.end("Error uploading file." + req.body._id);
+        }
 
-        eventDataUpdate = {
+        console.log("Event updated :" + req.file.path + "\n");
+        EventDataUpdate = {
+            _id: req.body._id, // ADD ID,
             event_picture: fs.readFileSync(req.file.path),
             contentType: 'image/jpg',
         };
 
-        Eventus.findByIdAndUpdate(req.session.userId, { $set: userDataUpdate }, function(err, user) {
+        Eventus.findByIdAndUpdate(req.session.user, { $set: userDataUpdate }, function(err, user) {
             if (err) return handleError(err);
 
             req.session.save(function(eir) {
                 req.session.reload(function(err) {
-                    req.session.user = userDataUpdate;
-                    console.log("User updated : :" + req.session.userId + "\n");
+                    req.session.user = user;
                 });
             });
         });
 
-        return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/profile.ejs', { userProfile: req.session.user });
+        res.redirect('/Profile');
 
-    })
-})
+    });
+});
 
 
 router.get('/getEventList', requiresLogin, function(req, res, next) {

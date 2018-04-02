@@ -17,10 +17,11 @@
     <div class="row">
       <section class="col-sm-offset-3 col-sm-6">
           <form  id="uploadForm" enctype="multipart/form-data" action="/Event/picture" method="post">
+                  <input type="hidden" class="form-control" name="_id" id="_id" readonly value=<%= userProfile.event._id %>  />
                   <label class="btn btn-default btn-file ">
                      Browse <input type="file" name="EventPhoto" style="display: none;" required />
-                     <input type="hidden" class="form-control" name="_id" id="_id" readonly value=<%= userProfile.event._id %>  />
                   </label>
+                  <input type="submit" class="btn btn-primary" value="Upload Image" name="submit">
           </form>
 
           <form class="form-event" action="/updateEvent" method="post">
