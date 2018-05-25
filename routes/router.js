@@ -1,3 +1,4 @@
+
 var express = require('express');
 var router = express.Router();
 var User = require('../models/users');
@@ -15,8 +16,6 @@ var storage = multer.diskStorage({
 });
 
 var upload = multer({ storage: storage }).single('userPhoto');
-
-
 
 function requiresLogin(req, res, next) {
     if (req.session && req.session.userId) {
@@ -495,15 +494,7 @@ router.post('/Event/picture', requiresLogin, function(req, res, next) {
 
 
 router.get('/getEventList', requiresLogin, function(req, res, next) {
-
-        Eventus.find(function(err, eventListRequest) {
-            if (err) return handleError(err);
-            console.log(" We found :" + eventListRequest + "\n");
-            req.session.user.eventList = eventListRequest;
-
-            return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayEventList.ejs', { userProfile: req.session.user });
-        });
-
+      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayEventList.ejs', { userProfile: req.session.user });
     })
     // #####################################################
 
