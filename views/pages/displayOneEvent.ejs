@@ -4,7 +4,21 @@
 <head>
     <% include ../partials/head %>
     <link href="/style/event.css" rel="stylesheet">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 1%;
+        padding: 1%;
+      }
+    </style>
 </head>
+
 <body class="container">
 
 <header>
@@ -12,6 +26,7 @@
 </header>
 
 <main>
+
   <div class="Event_Information">
     <ul class="list-group">
       <li class="list-group-item">Id :<%= userProfile.event[0]._id %></li>
@@ -19,7 +34,7 @@
       <li class="list-group-item">Date : <%= userProfile.event[0].date %></li>
       <li class="list-group-item">Update day: <%= userProfile.event[0].updated %></li>
       <li class="list-group-item">Description : <%= userProfile.event[0].description %></li>
-     
+
       <form action="/editOneEventId" method="get">
                     <input type="hidden" name="_id" id="_id" value="<%= userProfile.event[0]._id %>" />
                     <button class="btn btn-block btn-primary">Edit</button>
@@ -31,9 +46,23 @@
 
 </main>
 
-<footer>
-    <% include ../partials/footer %>
-</footer>
+<div id="map"></div>
+<script>
+  var map;
+  function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: -34.397, lng: 150.644},
+      zoom: 8
+    });
+  }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyArQj7DPxXjwANQVXPf6RU83V_33xfiWrs&callback=initMap" async defer></script>
 
 </body>
+
+<footer>
+
+    <% include ../partials/footer %>
+</footer>
 </html>
