@@ -5,6 +5,7 @@ var User = require('../models/users');
 var Eventus = require('../models/events');
 var fs = require('file-system');
 var multer = require('multer');
+var geocoder = require('geocoder');
 
 var storage = multer.diskStorage({
     destination: function(req, file, callback) {
@@ -385,6 +386,12 @@ router.get('/GetOneEvent', requiresLogin, function(req, res, next) {
         Eventus.find(eventusV, function(err, eventusV) {
             if (err) return handleError(err);
             req.session.user.event = eventusV;
+            console.log(req.session.user.event.address + "\n");
+            geocoder.geocode("Atlanta, GA", function ( err, data ) {
+              console.log(
+                JSON.stringify(data)
+              );
+            });
             return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { userProfile: req.session.user });
         })
 
