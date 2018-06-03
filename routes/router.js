@@ -1,4 +1,3 @@
-
 var express = require('express');
 var router = express.Router();
 var User = require('../models/users');
@@ -386,13 +385,24 @@ router.get('/GetOneEvent', requiresLogin, function(req, res, next) {
         Eventus.find(eventusV, function(err, eventusV) {
             if (err) return handleError(err);
             req.session.user.event = eventusV;
-            console.log(req.session.user.event.address + "\n");
-            geocoder.geocode("Atlanta, GA", function ( err, data ) {
-              console.log(
-                JSON.stringify(data)
-              );
+            console.log(eventusV[0].address.building_number + " " + eventusV[0].address.street_name + " " + eventusV[0].address.post_code + " " + eventusV[0].address.city);
+            var localisation = eventusV[0].address.building_number + " " + eventusV[0].address.street_name + " " + eventusV[0].address.post_code + " " + eventusV[0].address.city;
+            geocoder.geocode(localisation, function(err, data) {
+                console.log(util.inspect(data, false, null));
+
+                console.log(util.inspect(req.session.user.loc, false, null));
+                console.log(data.results[0].geometry.location);
+                console.log(data.results[0].geometry.location.lat);
+                console.log(data.results[0].geometry.location.lng);
+                req.session.user.GPSloc = data.results[0].geometry.location;
+                console.log(req.session.user.GPSloc);
+                req.session.save(function(err) {
+                    // session saved
+                })
+                return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { userProfile: req.session.user });
             });
-            return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayOneEvent.ejs', { userProfile: req.session.user });
+
+
         })
 
     } else {
@@ -501,7 +511,7 @@ router.post('/Event/picture', requiresLogin, function(req, res, next) {
 
 
 router.get('/getEventList', requiresLogin, function(req, res, next) {
-      return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayEventList.ejs', { userProfile: req.session.user });
+        return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/displayEventList.ejs', { userProfile: req.session.user });
     })
     // #####################################################
 

@@ -34,6 +34,8 @@
       <li class="list-group-item">Date : <%= userProfile.event[0].date %></li>
       <li class="list-group-item">Update day: <%= userProfile.event[0].updated %></li>
       <li class="list-group-item">Description : <%= userProfile.event[0].description %></li>
+      <li class="list-group-item">GPS lat : <%= userProfile.GPSloc.lat %></li>
+      <li class="list-group-item">GPS lng : <%= userProfile.GPSloc.lng %></li>
 
       <form action="/editOneEventId" method="get">
                     <input type="hidden" name="_id" id="_id" value="<%= userProfile.event[0]._id %>" />
@@ -50,10 +52,21 @@
 <script>
   var map;
   function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: -34.397, lng: 150.644},
-      zoom: 8
+    var myLatLng = {lat: <%=userProfile.GPSloc.lat %> , lng: <%=userProfile.GPSloc.lng %> };
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 16,
+      center: myLatLng
     });
+
+    var marker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      title: 'Your event is there!'
+    });
+    
+
+
   }
 </script>
 
