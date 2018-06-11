@@ -569,4 +569,19 @@ router.get('/getUserList', requiresLogin, function(req, res, next) {
     })
 })
 
+router.get('/chatRoom', requiresLogin, function(req, res, next) {
+
+    var userIdRequest = {
+        _id: req.session.userId,
+    }
+
+    User.findOne(userIdRequest, function(err, userRequest) {
+        if (err) return handleError(err);
+        req.session.user.userRequest = userRequest;
+        return res.render('C:/Users/Gabriel/Documents/GitHub/PFE_Prototype_1/views/pages/chatRoom.ejs', { userProfile: req.session.user });
+    })
+
+})
+
+
 module.exports = router;
